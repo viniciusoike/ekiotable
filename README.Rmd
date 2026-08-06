@@ -1,0 +1,59 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# ekiotable
+
+EKIO-branded styling for [gt](https://gt.rstudio.com) tables.
+
+Brand color and type come from
+[ekioplot](https://github.com/viniciusoike/ekioplot), which is the single
+source of truth for EKIO's visual identity. Charts and tables therefore share
+one palette by construction — `ekiotable` contains no hex codes of its own.
+
+## Installation
+
+```r
+# install.packages("pak")
+pak::pak("viniciusoike/ekiotable")
+```
+
+## Usage
+
+```r
+library(gt)
+library(ekiotable)
+
+head(mtcars, 10) |>
+  gt() |>
+  gt_theme_ekio()
+```
+
+`gt_theme_ekio()` styles headers, column labels, row groups, summary rows,
+stubs, source notes, and footnotes, and adds an EKIO source note by default.
+
+```r
+gt_theme_ekio(tbl, table_width = "80%", font_size = 12, stripe = FALSE, add_footer = FALSE)
+```
+
+## Relationship to ekioplot
+
+| Package | Scope |
+|---|---|
+| [ekioplot](https://github.com/viniciusoike/ekioplot) | Brand tokens, ggplot2 themes, scales, palettes, chart recipes |
+| ekiotable | gt table styling |
+
+To change a brand color, edit `inst/ekio-palettes.yaml` in `ekioplot` and
+rerun its `data-raw/palettes.R`. This package picks the change up
+automatically via `ekioplot::ekio_pal()`.
