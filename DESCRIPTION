@@ -14,17 +14,16 @@ Description: EKIO-branded styling for 'gt' tables. Applies the same brand
     tables produced for EKIO share one visual identity.
 URL: https://github.com/viniciusoike/ekiotable
 BugReports: https://github.com/viniciusoike/ekiotable/issues
+Additional_repositories: https://viniciusoike.r-universe.dev
 License: MIT + file LICENSE
 Depends: R (>= 4.1.0)
 Encoding: UTF-8
 RoxygenNote: 7.3.3
 Imports:
     cli,
-    ekioplot (>= 0.7.0),
+    ekioplot (>= 1.1.2),
     gt
 Suggests:
     testthat (>= 3.0.0)
-Remotes:
-    viniciusoike/ekioplot
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
