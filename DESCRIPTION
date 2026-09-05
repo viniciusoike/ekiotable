@@ -20,7 +20,7 @@ Encoding: UTF-8
 RoxygenNote: 7.3.3
 Imports:
     cli,
-    ekioplot (>= 0.6.0),
+    ekioplot (>= 0.7.0),
     gt
 Suggests:
     testthat (>= 3.0.0)

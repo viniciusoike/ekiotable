@@ -31,19 +31,19 @@ gt_theme_ekio <- function(
 
   # Reference brand tokens directly to stay in sync with any future changes
   colors <- list(
-    primary       = .ekio("blue", 700), # headers, accents
-    primary_dark  = .ekio("blue", 800), # grand summary background
+    primary = .ekio("blue", 700), # headers, accents
+    primary_dark = .ekio("blue", 800), # grand summary background
     primary_light = .ekio("blue", 100), # summary row tint
-    row_group_bg  = .ekio("blue", 100), # row group label background
-    text          = .ekio("gray", 900),
-    text_mid      = .ekio("gray", 700),
-    text_light    = .ekio("gray", 600),
-    border        = .ekio("gray", 300),
-    stripe_bg     = .ekio("gray", 200), # striping, one step off light_bg
-    light_bg      = .ekio("gray", 100)
+    row_group_bg = .ekio("blue", 100), # row group label background
+    text = .ekio("gray", 900),
+    text_mid = .ekio("gray", 700),
+    text_light = .ekio("gray", 600),
+    border = .ekio("gray", 300),
+    stripe_bg = .ekio("gray", 200), # striping, one step off light_bg
+    light_bg = .ekio("gray", 100)
   )
 
-  font_family <- ekioplot::ekio_font("primary")
+  font_family <- .font_main
 
   styled_table <- data |>
     gt::opt_table_font(font = font_family) |>
@@ -142,22 +142,28 @@ gt_theme_ekio <- function(
     # Subtle bottom border on every body row
     gt::tab_style(
       style = gt::cell_borders(
-        sides = "bottom", color = colors$border, weight = gt::px(1)
+        sides = "bottom",
+        color = colors$border,
+        weight = gt::px(1)
       ),
       locations = gt::cells_body()
     ) |>
     # Table title: primary blue, bold, left-aligned
     gt::tab_style(
       style = gt::cell_text(
-        color = colors$primary, weight = "600", align = "left"
+        color = colors$primary,
+        weight = "600",
+        align = "left"
       ),
       locations = gt::cells_title(groups = "title")
     ) |>
     # Subtitle: muted, smaller, left-aligned
     gt::tab_style(
       style = gt::cell_text(
-        color = colors$text_light, weight = "normal",
-        size = gt::px(font_size), align = "left"
+        color = colors$text_light,
+        weight = "normal",
+        size = gt::px(font_size),
+        align = "left"
       ),
       locations = gt::cells_title(groups = "subtitle")
     ) |>
