@@ -5,3 +5,4 @@
 docs/
 *.Rcheck/
 .DS_Store
+refs/*

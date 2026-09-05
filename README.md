@@ -13,10 +13,23 @@ hex codes of its own.
 
 ## Installation
 
+`ekiotable` and its hard dependency `ekioplot` are distributed through
+[r-universe](https://viniciusoike.r-universe.dev), not CRAN:
+
 ``` r
-# install.packages("pak")
-pak::pak("viniciusoike/ekiotable")
+install.packages(
+  "ekiotable",
+  repos = c("https://viniciusoike.r-universe.dev", "https://cloud.r-project.org")
+)
 ```
+
+`install.packages()` resolves `ekioplot` from the same universe
+automatically.
+
+> ekiotable cannot be submitted to CRAN in this state: CRAN only allows
+> hard dependencies from CRAN or Bioconductor, and `ekioplot` lives on
+> r-universe. A CRAN release would require publishing `ekioplot` to CRAN
+> first, or demoting it to a conditional (`Suggests`) dependency.
 
 ## Usage
 
