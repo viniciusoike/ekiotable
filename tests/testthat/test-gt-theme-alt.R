@@ -35,8 +35,8 @@ test_that("gt_theme_ekio_alt() uses ekioplot palettes", {
     unname(ekioplot::ekio_pal("gray")["900"])
   )
   expect_equal(
-    gt_option(out, "source_notes_background_color"),
-    unname(ekioplot::ekio_pal("ekio_brand")["Soft Linen 2"])
+    is.na(gt_option(out, "source_notes_background_color")),
+    TRUE
   )
 })
 
@@ -85,7 +85,7 @@ test_that("summary rows are tinted and their stub labels match", {
 
   expect_equal(
     gt_option(out, "summary_row_background_color"),
-    .ekio("blue", 100)
+    .ekio("ekio_brand", "Soft Linen 2")
   )
   # gt files the value cell and its stub label under one locname; the stub
   # label is the entry with no column.

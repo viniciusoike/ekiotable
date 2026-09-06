@@ -82,3 +82,68 @@
   }
   return(unname(family))
 }
+
+# Hokusai palettes ----------------------------------------------------------
+
+# Shared neutral scale for structural elements, independent of print colors.
+.hokusai_grays <- c(
+  gray_50 = "#FAFAFA",
+  gray_100 = "#F5F5F5",
+  gray_200 = "#E5E5E5",
+  gray_300 = "#D4D4D4",
+  gray_400 = "#A3A3A3",
+  gray_500 = "#737373",
+  gray_600 = "#525252",
+  gray_700 = "#404040",
+  gray_800 = "#262626",
+  gray_900 = "#171717"
+)
+
+# Representative RGB colors extracted from the four supplied reproductions
+# (cropped 4% at each edge, reduced to 400 px, median-cut quantized to 10 colors).
+# Ink, blue, mist, and paper are extracted colors. White is a neutral canvas;
+# wash is an explicit 25% paper-on-white tint. Each palette includes the
+# shared gray scale for rules, zebra stripes, and other neutral elements.
+# These describe the supplied digital images, not original print pigments.
+.hokusai_palettes <- list(
+  # Inume Pass in Kai Province
+  mountain = c(
+    ink = "#204D6D",
+    blue = "#204D6D",
+    mist = "#ACC1C2",
+    paper = "#EFEADE",
+    canvas = "#FFFFFF",
+    wash = "#FBFAF7",
+    .hokusai_grays
+  ),
+  # Ejiri in Suruga Province
+  wind = c(
+    ink = "#3F5C6C",
+    blue = "#3F5C6C",
+    mist = "#919E9F",
+    paper = "#DDD5C4",
+    canvas = "#FFFFFF",
+    wash = "#F6F4F0",
+    .hokusai_grays
+  ),
+  # Bullfinch and Weeping Cherry (Uso, shidarezakura)
+  blossom = c(
+    ink = "#2C4254",
+    blue = "#2A5471",
+    mist = "#8F8D7A",
+    paper = "#D3C8A9",
+    canvas = "#FFFFFF",
+    wash = "#F4F1EA",
+    .hokusai_grays
+  ),
+  # Lake Suwa in Shinano Province
+  lake = c(
+    ink = "#3D5369",
+    blue = "#416880",
+    mist = "#9DA99E",
+    paper = "#FCE8C6",
+    canvas = "#FFFFFF",
+    wash = "#FEF9F1",
+    .hokusai_grays
+  )
+)
