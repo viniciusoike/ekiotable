@@ -1,5 +1,23 @@
 # Alternative GT table theme -----------------------------------------------
 
+#' Apply an Alternative EKIO Theme to GT Tables
+#'
+#' An alternative EKIO styling for gt table objects. It keeps the blue column
+#' label band, replaces filled group bands with Baltic Blue rules above
+#' unfilled group headings, and renders body numerals with tabular figures.
+#' No footer is added.
+#'
+#' @inheritParams gt_theme_ekio
+#'
+#' @return A styled gt table object
+#' @export
+#'
+#' @examples
+#' library(gt)
+#' head(mtcars, 10) |>
+#'   gt() |>
+#'   gt_theme_ekio_alt()
+
 # Two blues carry two jobs. Baltic Blue is the editorial voice: title and
 # row group headings. Blue 700 is structure: the column label slab and the
 # emphasis on summary values.

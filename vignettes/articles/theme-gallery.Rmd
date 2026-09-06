@@ -157,13 +157,12 @@ complete_table |> gt_theme_ekio(stripe = TRUE)
 ## EKIO alternative (experimental)
 
 The alternative retains the blue header band and uses unfilled group headings
-with Baltic Blue rules. It does not add a footer. This function is internal;
-the `:::` calls below are for previewing it and are not a stable public API.
+with Baltic Blue rules. It does not add a footer.
 
 ::: {data-bs-theme="light"}
 
 ```{r alternative-simple}
-simple_table |> ekiotable:::gt_theme_ekio_alt(stripe = TRUE)
+simple_table |> gt_theme_ekio_alt(stripe = TRUE)
 ```
 
 :::
@@ -171,7 +170,7 @@ simple_table |> ekiotable:::gt_theme_ekio_alt(stripe = TRUE)
 ::: {data-bs-theme="light"}
 
 ```{r alternative-complete}
-complete_table |> ekiotable:::gt_theme_ekio_alt(stripe = TRUE)
+complete_table |> gt_theme_ekio_alt(stripe = TRUE)
 ```
 
 :::

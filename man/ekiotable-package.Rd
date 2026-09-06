@@ -11,6 +11,7 @@ EKIO-branded styling for 'gt' tables. Applies the same brand color and type toke
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://viniciusoike.github.io/ekiotable/}
   \item \url{https://github.com/viniciusoike/ekiotable}
   \item Report bugs at \url{https://github.com/viniciusoike/ekiotable/issues}
 }

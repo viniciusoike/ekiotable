@@ -46,6 +46,7 @@ reference:
     desc: Apply EKIO visual identity to gt tables
     contents:
       - gt_theme_ekio
+      - gt_theme_ekio_alt
       - gt_theme_hokusai
   - title: Datasets
     desc: Example data included with ekiotable
