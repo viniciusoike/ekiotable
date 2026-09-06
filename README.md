@@ -1,23 +1,31 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+[![](https://www.r-pkg.org/badges/version/ekiotable)](https://cran.r-project.org/package=ekiotable)
+[![CRAN
+checks](https://badges.cranchecks.info/worst/ekiotable.svg)](https://cran.r-project.org/web/checks/check_results_ekiotable.html)
+
 # ekiotable
 
 ekiotable applies the EKIO visual identity to
-[gt](https://gt.rstudio.com) tables.
-
-[ekioplot](https://github.com/viniciusoike/ekioplot) provides EKIO color
-scales. ekiotable reads those scales through `ekioplot::ekio_pal()` and
-keeps pinned copies of the basic and brand tokens in `R/tokens.R`.
-Titles use Lora and body text uses Lato by default, matching charts made
-with ekioplot.
+[gt](https://gt.rstudio.com) tables, with the Lora and Lato type pairing
+used across EKIO charts and reports.
 
 ## Installation
 
-ekiotable and its only non-CRAN dependency, ekioplot, ship from the
-[viniciusoike r-universe](https://viniciusoike.r-universe.dev). Neither
-package is on CRAN, since CRAN only accepts hard dependencies that are
-themselves on CRAN. The command below installs ekiotable.
+ekiotable is not on CRAN. Install it from GitHub with remotes. Its only
+non-CRAN dependency,
+[ekioplot](https://github.com/viniciusoike/ekioplot), must be installed
+first, because remotes resolves dependencies from CRAN only.
+
+``` r
+# install.packages("remotes")
+remotes::install_github("viniciusoike/ekioplot")
+remotes::install_github("viniciusoike/ekiotable")
+```
+
+Alternatively, install both packages from the [viniciusoike
+r-universe](https://viniciusoike.r-universe.dev) in a single call:
 
 ``` r
 install.packages(
@@ -26,8 +34,18 @@ install.packages(
 )
 ```
 
-`install.packages()` resolves `ekioplot` from the same universe
-automatically.
+## Themes
+
+ekiotable ships three themes for gt tables:
+
+- `gt_theme_ekio()` — the default EKIO theme: filled blue column labels,
+  banded row groups, and an automatic EKIO source note.
+- `gt_theme_ekio_alt()` — experimental alternative: keeps the blue
+  header band, replaces filled group bands with Baltic Blue rules, and
+  uses tabular numerals. No footer is added.
+- `gt_theme_hokusai()` — a minimal blue-and-paper theme with four
+  palettes (`mountain`, `wind`, `blossom`, `lake`), optional gridlines,
+  and no footer.
 
 ## Usage
 
@@ -41,40 +59,17 @@ head(mtcars, 10) |>
 ```
 
 `gt_theme_ekio()` styles headers, column labels, row groups, summary
-rows, stubs, source notes, and footnotes. It also adds an EKIO source
-note by default.
+rows, stubs, source notes, and footnotes, and adds an EKIO source note
+by default:
 
 ``` r
-gt_theme_ekio(tbl, table_width = "80%", font_size = 12, stripe = FALSE, add_footer = FALSE)
+gt_theme_ekio(
+  data,
+  table_width = "100%",
+  font_size = 14,
+  stripe = TRUE,
+  add_footer = TRUE
+)
 ```
-
-## Relationship to ekioplot
-
-| Package | Scope |
-|----|----|
-| [ekioplot](https://github.com/viniciusoike/ekioplot) | Brand tokens, ggplot2 themes, scales, palettes, chart recipes |
-| ekiotable | gt table styling |
-
-To change a brand color, edit `inst/ekio-palettes.yaml` in ekioplot and
-rerun its `data-raw/palettes.R`. ekiotable picks scale changes up
-through `ekioplot::ekio_pal()`. Update the pinned basic and brand tokens
-in `R/tokens.R` separately when they change upstream.
-
-## Fonts
-
-Set fonts with `font_title`, `font_body`, `font_numeric`, and
-`font_labels`. Each accepts a family name or a key: `lora`, `lato`,
-`georgia`, `roboto_slab`, `fira_code`, or `host_grotesk`. Fonts must be
-available to the renderer.
-
-``` r
-gt_theme_ekio(tbl, font_title = "georgia", font_numeric = "fira_code")
-```
-
-Arguments override `ekiotable.font_title`, `ekiotable.font_body`,
-`ekiotable.font_numeric`, and `ekiotable.font_labels` options. Title and
-body then fall back to `ekioplot.font_title` and `ekioplot.font_text`,
-followed by Lora and Lato. Numeric and label fonts inherit the resolved
-body font.
 
 <img src="man/figures/README-example-table.png" alt="EKIO table with a serif title, blue column labels, and alternating gray rows." width="100%" />
