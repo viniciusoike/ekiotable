@@ -21,3 +21,4 @@
     Condition
       Error in `gt_theme_hokusai()`:
       ! `gridlines` must be TRUE or FALSE.
+
