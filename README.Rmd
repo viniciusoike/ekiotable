@@ -88,11 +88,18 @@ Lora and Lato. Numeric and label fonts inherit the resolved body font.
 ```{r example-table, echo=FALSE, message=FALSE, fig.alt="EKIO table with a serif title, blue column labels, and alternating gray rows."}
 devtools::load_all(quiet = TRUE)
 example_table <- gt::gt(head(mtcars[c("mpg", "cyl", "hp", "wt")], 5)) |>
-  gt::tab_header(title = "Vehicle characteristics", subtitle = "Selected models from mtcars") |>
+  gt::tab_header(
+    title = "Vehicle characteristics",
+    subtitle = "Selected models from mtcars"
+  ) |>
   gt_theme_ekio()
 dir.create("man/figures", recursive = TRUE, showWarnings = FALSE)
 invisible(capture.output(
-  gt::gtsave(example_table, "man/figures/README-example-table.png", vwidth = 800)
+  gt::gtsave(
+    example_table,
+    "man/figures/README-example-table.png",
+    vwidth = 800
+  )
 ))
 knitr::include_graphics("man/figures/README-example-table.png")
 ```
