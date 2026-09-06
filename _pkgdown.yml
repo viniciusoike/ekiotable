@@ -1,0 +1,47 @@
+url: https://viniciusoike.github.io/ekiotable/
+
+template:
+  bootstrap: 5
+  light-switch: true
+  theme: arrow-light
+  theme-dark: arrow-dark
+  bslib:
+    # EKIO surfaces, ink, links, rules, and code tokens.
+    bg: "#FFFFFF"
+    fg: "#191A1C"
+    primary: "#1E3A5F"
+    secondary: "#373A3D"
+    border-color: "#CFD2D5"
+    code-bg: "#F2F3F5"
+    code-color: "#006261"
+    navbar-bg: "#152A44"
+    body-bg-dark: "#0D1B2A"
+    body-color-dark: "#CFD2D5"
+    base_font: {google: "Lato"}
+    heading_font: {google: "Lora"}
+    code_font: {google: "Fira Code"}
+    headings-font-weight: 600
+    navbar-brand-font-family: "Host Grotesk"
+
+navbar:
+  structure:
+    left: [intro, reference, articles, news]
+    right: [search, github, lightswitch]
+
+footer:
+  structure:
+    left: [developed_by, package]
+    right: [built_with]
+  components:
+    package: "Part of EKIO's visual identity system."
+
+reference:
+  - title: Table Themes
+    desc: Apply EKIO visual identity to gt tables
+    contents:
+      - gt_theme_ekio
+      - gt_theme_hokusai
+  - title: Datasets
+    desc: Example data included with ekiotable
+    contents:
+      - generations_brazil

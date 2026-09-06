@@ -1,0 +1,168 @@
+// EKIO brand refinements on top of the bslib variables in _pkgdown.yml.
+// Colors are tokens from ekioplot's published EKIO palette registry.
+
+:root {
+  --ekio-navy: #152A44;
+  --ekio-accent: #1E3A5F;
+  --ekio-rule: #CFD2D5;
+  --ekio-muted: #6E7378;
+  --ekio-orange: #D3742A;
+  --ekio-surface: #FFFFFF;
+  --ekio-ink: #191A1C;
+}
+
+[data-bs-theme="dark"] {
+  --ekio-accent: #5597CC;
+  --ekio-rule: #28292C;
+  --ekio-muted: #AEB1B5;
+  --ekio-surface: #0D1B2A;
+  --ekio-ink: #CFD2D5;
+
+  --bs-link-color: #84B8DD;
+  --bs-link-hover-color: #B1D8F2;
+  --bs-primary: #5597CC;
+  --bs-primary-rgb: 85, 151, 204;
+  --bs-code-color: #7EBEC0;
+  --bs-border-color: #28292C;
+  --bs-secondary-color: #AEB1B5;
+}
+
+/* navbar ------------------------------------------------------------------ */
+
+// The navigation remains navy in both color modes.
+.navbar {
+  --bs-navbar-color: #CFD2D5;
+  --bs-navbar-hover-color: #FFFFFF;
+  --bs-navbar-active-color: #FFFFFF;
+  --bs-navbar-brand-color: #FFFFFF;
+  --bs-navbar-brand-hover-color: #FFFFFF;
+  --bs-navbar-disabled-color: #6E7378;
+  --bs-navbar-toggler-border-color: #6E7378;
+  --bs-emphasis-color: #FFFFFF;
+  --bs-emphasis-color-rgb: 255, 255, 255;
+  --bs-secondary-color: #AEB1B5;
+  color: #CFD2D5;
+}
+
+.navbar-brand {
+  font-family: "Host Grotesk", "Lato";
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.navbar .navbar-toggler-icon {
+  --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23CFD2D5' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.navbar .nav-item .nav-link:hover,
+.navbar .nav-item.active .nav-link {
+  background: #1E3A5F;
+}
+
+.navbar .form-control,
+.navbar input[type="search"] {
+  background-color: #1E3A5F;
+  border-color: #6E7378;
+  color: #FFFFFF;
+
+  &::placeholder {
+    color: #AEB1B5;
+  }
+
+  &:focus {
+    background-color: #1E3A5F;
+    border-color: #84B8DD;
+    box-shadow: none;
+    color: #FFFFFF;
+  }
+}
+
+/* type -------------------------------------------------------------------- */
+
+body {
+  font-family: "Lato";
+}
+
+h1, h2, h3, h4, h5, h6, .page-header h1 {
+  font-family: "Lora";
+  letter-spacing: -0.01em;
+}
+
+pre, code, kbd, samp {
+  font-family: "Fira Code";
+}
+
+h2 {
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--ekio-rule);
+}
+
+.page-header {
+  border-bottom: 2px solid var(--ekio-accent);
+}
+
+/* content ----------------------------------------------------------------- */
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #D5AA48;
+  outline-offset: 2px;
+}
+
+::selection {
+  background: #D4DED9;
+  color: #191A1C;
+}
+
+pre {
+  background-color: #F2F3F5;
+  color: #191A1C;
+}
+
+[data-bs-theme="dark"] pre {
+  background-color: #28292C;
+  color: #CFD2D5;
+}
+
+blockquote {
+  padding-left: 1rem;
+  border-left: 3px solid var(--ekio-orange);
+  color: var(--ekio-muted);
+}
+
+table {
+  --bs-table-border-color: var(--ekio-rule);
+}
+
+table thead th {
+  border-bottom: 2px solid var(--ekio-accent);
+}
+
+footer {
+  border-top: 1px solid var(--ekio-rule);
+}
+
+.contents img {
+  border-radius: 2px;
+}
+
+[data-bs-theme="dark"] main img:not(.logo):not([src^="http"]) {
+  background-color: var(--ekio-surface);
+  padding: 0.5rem;
+  border-radius: 3px;
+  opacity: 0.85;
+  transition: opacity 250ms ease-in-out;
+
+  &:hover, &:focus {
+    opacity: 1;
+  }
+}
+
+/* reference index --------------------------------------------------------- */
+
+.template-reference-index .section h2 {
+  color: var(--ekio-accent);
+}
