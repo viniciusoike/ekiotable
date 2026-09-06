@@ -12,7 +12,7 @@ Authors@R:
 Description: EKIO-branded styling for 'gt' tables. Applies the same brand
     color and type tokens used by the 'ekioplot' package, so charts and
     tables produced for EKIO share one visual identity.
-URL: https://github.com/viniciusoike/ekiotable
+URL: https://viniciusoike.github.io/ekiotable/, https://github.com/viniciusoike/ekiotable
 BugReports: https://github.com/viniciusoike/ekiotable/issues
 Additional_repositories: https://viniciusoike.r-universe.dev
 License: MIT + file LICENSE

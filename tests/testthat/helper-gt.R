@@ -41,3 +41,10 @@ grouped_tbl <- function() {
   d <- data.frame(g = c("a", "a", "b"), x = 1:3)
   return(gt::gt(d, groupname_col = "g"))
 }
+
+# Summary value cells and their stub labels share one locname. The stub
+# label is the entry with no column.
+summary_entries <- function(tbl, locname) {
+  styles <- tbl[["_styles"]]
+  return(styles[styles$locname == locname, c("colname", "styles")])
+}

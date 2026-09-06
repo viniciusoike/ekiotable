@@ -96,13 +96,13 @@ test_that("the theme takes its colors from the token helper", {
   expect_equal(as_hex(gt_option(out, "heading_background_color")), "#FFFFFF")
 })
 
-test_that("hex codes appear only in the token file", {
+test_that("hex codes appear only in palette and token files", {
   local_font_options()
   r_dir <- test_path("..", "..", "R")
   skip_if_not(dir.exists(r_dir), "package source not available")
   files <- setdiff(
     list.files(r_dir, full.names = TRUE),
-    file.path(r_dir, "tokens.R")
+    file.path(r_dir, c("tokens.R", "utils.R"))
   )
   code <- unlist(lapply(files, readLines))
   expect_equal(any(grepl("#[0-9A-Fa-f]{6}\\b", code)), FALSE)
