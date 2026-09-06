@@ -35,6 +35,12 @@ footer:
   components:
     package: "Part of EKIO's visual identity system."
 
+articles:
+  - title: Table styling
+    navbar: ~
+    contents:
+      - articles/theme-gallery
+
 reference:
   - title: Table Themes
     desc: Apply EKIO visual identity to gt tables
