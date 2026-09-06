@@ -9,7 +9,11 @@ gt_theme_ekio(
   table_width = "100\%",
   font_size = 14,
   stripe = TRUE,
-  add_footer = TRUE
+  add_footer = TRUE,
+  font_title = NULL,
+  font_body = NULL,
+  font_numeric = NULL,
+  font_labels = NULL
 )
 }
 \arguments{
@@ -22,6 +26,14 @@ gt_theme_ekio(
 \item{stripe}{Logical. Apply alternating row striping (default: TRUE)}
 
 \item{add_footer}{Logical. Add automatic EKIO footer (default: TRUE)}
+
+\item{font_title, font_body, font_numeric, font_labels}{A font family or registry
+key (\code{lora}, \code{lato}, \code{georgia}, \code{roboto_slab}, \code{fira_code}, \code{host_grotesk}).
+\code{NULL} uses the corresponding \verb{ekiotable.font_<role>} option. Title and body
+then use \code{ekioplot.font_title} and \code{ekioplot.font_text}, respectively, before
+falling back to Lora and Lato. Numeric and label fonts inherit the resolved
+body font unless explicitly set or configured through their role option.
+Fonts must be available to the renderer; this function does not install them.}
 }
 \value{
 A styled gt table object

@@ -6,3 +6,9 @@
 ^_pkgdown\.yml$
 ^docs$
 ^CLAUDE\.md$
+^data-raw$
+^IMPLEMENTATION-PLAN\.md$
+
+^README\.html$
+^Rplots\.pdf$
+^refs$

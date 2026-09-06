@@ -1,4 +1,4 @@
-# ---- GT Table Theme ----
+# GT table theme ------------------------------------------------------------
 
 #' Apply EKIO Theme to GT Tables
 #'
@@ -9,6 +9,14 @@
 #' @param font_size Numeric. Base font size in pixels (default: 14)
 #' @param stripe Logical. Apply alternating row striping (default: TRUE)
 #' @param add_footer Logical. Add automatic EKIO footer (default: TRUE)
+#'
+#' @param font_title,font_body,font_numeric,font_labels A font family or registry
+#'   key (`lora`, `lato`, `georgia`, `roboto_slab`, `fira_code`, `host_grotesk`).
+#'   `NULL` uses the corresponding `ekiotable.font_<role>` option. Title and body
+#'   then use `ekioplot.font_title` and `ekioplot.font_text`, respectively, before
+#'   falling back to Lora and Lato. Numeric and label fonts inherit the resolved
+#'   body font unless explicitly set or configured through their role option.
+#'   Fonts must be available to the renderer; this function does not install them.
 #'
 #' @return A styled gt table object
 #' @export
@@ -23,11 +31,21 @@ gt_theme_ekio <- function(
   table_width = "100%",
   font_size = 14,
   stripe = TRUE,
-  add_footer = TRUE
+  add_footer = TRUE,
+  font_title = NULL,
+  font_body = NULL,
+  font_numeric = NULL,
+  font_labels = NULL
 ) {
   if (!inherits(data, "gt_tbl")) {
     cli::cli_abort("{.arg data} must be a gt table object")
   }
+
+  .validate_gt_theme_args(table_width, font_size, stripe, add_footer)
+  font_title <- .ekio_font("title", font_title)
+  font_body <- .ekio_font("body", font_body)
+  font_numeric <- .ekio_font("numeric", font_numeric, fallback = font_body)
+  font_labels <- .ekio_font("labels", font_labels, fallback = font_body)
 
   # Reference brand tokens directly to stay in sync with any future changes
   colors <- list(
@@ -43,10 +61,8 @@ gt_theme_ekio <- function(
     light_bg = .ekio("gray", 100)
   )
 
-  font_family <- .font_main
-
   styled_table <- data |>
-    gt::opt_table_font(font = font_family) |>
+    gt::opt_table_font(font = font_body) |>
     gt::tab_options(
       table.width = table_width,
       table.font.size = gt::px(font_size),
@@ -54,7 +70,7 @@ gt_theme_ekio <- function(
       table.font.weight = "normal",
       table.background.color = colors$light_bg,
 
-      heading.background.color = "white",
+      heading.background.color = .ekio("basic", "white"),
       heading.title.font.size = gt::px(font_size + 6),
       heading.title.font.weight = "600",
       heading.subtitle.font.size = gt::px(font_size),
@@ -126,7 +142,11 @@ gt_theme_ekio <- function(
     # Column labels: white text on primary blue
     gt::tab_style(
       style = list(
-        gt::cell_text(color = "white", weight = "600"),
+        gt::cell_text(
+          color = ekioplot::ekio_text_on(colors$primary),
+          weight = "600",
+          font = font_labels
+        ),
         gt::cell_fill(color = colors$primary)
       ),
       locations = gt::cells_column_labels()
@@ -134,7 +154,10 @@ gt_theme_ekio <- function(
     # Spanner labels: same treatment as column labels
     gt::tab_style(
       style = list(
-        gt::cell_text(weight = "700", color = "white"),
+        gt::cell_text(
+          weight = "700",
+          color = ekioplot::ekio_text_on(colors$primary)
+        ),
         gt::cell_fill(color = colors$primary)
       ),
       locations = gt::cells_column_spanners()
@@ -152,6 +175,7 @@ gt_theme_ekio <- function(
     gt::tab_style(
       style = gt::cell_text(
         color = colors$primary,
+        font = font_title,
         weight = "600",
         align = "left"
       ),
@@ -171,43 +195,93 @@ gt_theme_ekio <- function(
     gt::tab_style(
       style = gt::cell_text(color = colors$text_mid, weight = "600"),
       locations = gt::cells_stub()
-    )
-
-  # Styles that only apply when the table has the relevant elements
-  optional_styles <- list(
-    list(
+    ) |>
+    gt::tab_style(
+      style = gt::cell_text(font = font_numeric),
+      locations = gt::cells_body(columns = tidyselect::where(is.numeric))
+    ) |>
+    gt::tab_style(
       style = gt::cell_text(color = colors$primary, weight = "600"),
       locations = gt::cells_row_groups()
-    ),
-    list(
-      style = gt::cell_text(color = colors$primary, weight = "600"),
-      locations = gt::cells_summary()
-    ),
-    list(
-      style = gt::cell_text(color = "white", weight = "700"),
-      locations = gt::cells_grand_summary()
-    ),
-    list(
+    ) |>
+    gt::tab_style(
       style = gt::cell_text(color = colors$text_light),
       locations = gt::cells_source_notes()
-    ),
-    list(
+    ) |>
+    gt::tab_style(
       style = gt::cell_text(color = colors$text_light),
       locations = gt::cells_footnotes()
     )
-  )
 
-  for (s in optional_styles) {
+  # gt errors on missing summaries. Apply each group separately so a group
+  # without summaries cannot discard styles for groups that have them.
+  # TRUE avoids gt 1.3.0's everything() resolution error for summary rows.
+  for (group in unique(data[["_stub_df"]]$group_id)) {
     styled_table <- tryCatch(
-      gt::tab_style(styled_table, style = s$style, locations = s$locations),
+      gt::tab_style(
+        styled_table,
+        style = gt::cell_text(color = colors$primary, weight = "600"),
+        locations = gt::cells_summary(groups = group, rows = TRUE)
+      ),
       error = function(e) styled_table
     )
   }
+  styled_table <- tryCatch(
+    gt::tab_style(
+      styled_table,
+      style = gt::cell_text(
+        color = ekioplot::ekio_text_on(colors$primary_dark),
+        weight = "700"
+      ),
+      locations = gt::cells_grand_summary(rows = TRUE)
+    ),
+    error = function(e) styled_table
+  )
 
   if (add_footer) {
     styled_table <- styled_table |>
       gt::tab_source_note(source_note = "EKIO")
   }
 
-  styled_table
+  return(styled_table)
+}
+
+# Argument validation -------------------------------------------------------
+
+.validate_gt_theme_args <- function(
+  table_width,
+  font_size,
+  stripe,
+  add_footer,
+  call = parent.frame()
+) {
+  if (
+    !is.character(table_width) ||
+      length(table_width) != 1L ||
+      is.na(table_width) ||
+      !nzchar(trimws(table_width))
+  ) {
+    cli::cli_abort(
+      "{.arg table_width} must be a single non-empty string.",
+      call = call
+    )
+  }
+  if (
+    !is.numeric(font_size) ||
+      length(font_size) != 1L ||
+      !is.finite(font_size) ||
+      font_size <= 0
+  ) {
+    cli::cli_abort(
+      "{.arg font_size} must be a single positive finite number.",
+      call = call
+    )
+  }
+  for (arg in c("stripe", "add_footer")) {
+    value <- get(arg)
+    if (!is.logical(value) || length(value) != 1L || is.na(value)) {
+      cli::cli_abort("{.arg {arg}} must be TRUE or FALSE.", call = call)
+    }
+  }
+  invisible(NULL)
 }
