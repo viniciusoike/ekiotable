@@ -31,8 +31,10 @@ gt_theme_ekio_alt <- function(
     text = .ekio("gray", 900),
     text_mid = .ekio("gray", 700),
     text_light = .ekio("gray", 600),
-    border = .ekio("gray", 300),
-    stripe_bg = .ekio("gray", 100),
+    # Stone is the palette's warm neutral. The note bands are Soft Linen,
+    # so cool greys here left the table in two temperatures.
+    border = .ekio("stone", 300),
+    stripe_bg = .ekio("stone", 100),
     note_bg = .ekio("ekio_brand", "Soft Linen 2")
   )
 

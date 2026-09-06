@@ -174,3 +174,17 @@ test_that("the numeric font inherits the body font and respects overrides", {
   out <- gt_theme_ekio_alt(tbl, font_body = "Georgia", font_numeric = "Lato")
   expect_equal(tail(gt_styles_at(out, "data"), 1)[[1]]$cell_text$font, "Lato")
 })
+
+test_that("the body neutrals are warm, matching the note bands", {
+  local_font_options()
+  out <- gt_theme_ekio_alt(small_tbl())
+
+  expect_equal(
+    gt_option(out, "row_striping_background_color"),
+    .ekio("stone", 100)
+  )
+  expect_equal(
+    gt_option(out, "column_labels_border_bottom_color"),
+    .ekio("stone", 300)
+  )
+})
