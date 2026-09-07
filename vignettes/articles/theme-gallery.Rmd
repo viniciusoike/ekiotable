@@ -135,8 +135,9 @@ complete_table <- pizza_data |>
 
 ## EKIO
 
-`gt_theme_ekio()` uses filled blue column headers and spanners, pale blue
-group bands, and a dark grand total. It adds an EKIO footer by default.
+`gt_theme_ekio()` uses filled blue column headers and spanners, unfilled group
+headings with Baltic Blue rules, and a dark grand total. It does not add a
+footer.
 
 ::: {data-bs-theme="light"}
 
@@ -150,27 +151,6 @@ simple_table |> gt_theme_ekio(stripe = TRUE)
 
 ```{r ekio-complete}
 complete_table |> gt_theme_ekio(stripe = TRUE)
-```
-
-:::
-
-## EKIO alternative (experimental)
-
-The alternative retains the blue header band and uses unfilled group headings
-with Baltic Blue rules. It does not add a footer.
-
-::: {data-bs-theme="light"}
-
-```{r alternative-simple}
-simple_table |> gt_theme_ekio_alt(stripe = TRUE)
-```
-
-:::
-
-::: {data-bs-theme="light"}
-
-```{r alternative-complete}
-complete_table |> gt_theme_ekio_alt(stripe = TRUE)
 ```
 
 :::
@@ -268,4 +248,3 @@ complete_table |>
 ```
 
 :::
-

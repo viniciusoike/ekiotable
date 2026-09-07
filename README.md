@@ -25,40 +25,11 @@ install.packages(
 
 ## Themes
 
-ekiotable ships three themes for gt tables:
+ekiotable ships two themes for gt tables:
 
 - `gt_theme_ekio()` — the default EKIO theme: filled blue column labels,
-  banded row groups, and an automatic EKIO source note.
-- `gt_theme_ekio_alt()` — experimental alternative: keeps the blue
-  header band, replaces filled group bands with Baltic Blue rules, and
-  uses tabular numerals. No footer is added.
+  unfilled group headings with Baltic Blue rules, and tabular numerals.
+  No footer is added.
 - `gt_theme_hokusai()` — a minimal blue-and-paper theme with four
   palettes (`mountain`, `wind`, `blossom`, `lake`), optional gridlines,
   and no footer.
-
-## Usage
-
-``` r
-library(gt)
-library(ekiotable)
-
-head(mtcars, 10) |>
-  gt() |>
-  gt_theme_ekio()
-```
-
-`gt_theme_ekio()` styles headers, column labels, row groups, summary
-rows, stubs, source notes, and footnotes, and adds an EKIO source note
-by default:
-
-``` r
-gt_theme_ekio(
-  data,
-  table_width = "100%",
-  font_size = 14,
-  stripe = TRUE,
-  add_footer = TRUE
-)
-```
-
-<img src="man/figures/README-example-table.png" alt="EKIO table with a serif title, blue column labels, and alternating gray rows." width="100%" />

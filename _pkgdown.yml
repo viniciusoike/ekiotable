@@ -7,7 +7,7 @@ template:
   theme-dark: arrow-dark
   bslib:
     # EKIO surfaces, ink, links, rules, and code tokens.
-    bg: "#FFFFFF"
+    bg: "#FCFBF8"
     fg: "#191A1C"
     primary: "#1E3A5F"
     secondary: "#373A3D"
@@ -46,7 +46,6 @@ reference:
     desc: Apply EKIO visual identity to gt tables
     contents:
       - gt_theme_ekio
-      - gt_theme_ekio_alt
       - gt_theme_hokusai
   - title: Datasets
     desc: Example data included with ekiotable
