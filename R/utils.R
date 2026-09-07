@@ -37,8 +37,35 @@
   title = "Lora",
   body = "Lato",
   numeric = "Lato",
-  labels = "Lato"
+  labels = "Lato",
+  stub = "Lato"
 )
+
+# Some families ship every weight under its own family name, so the base
+# family holds only 400 and 700. A CSS request for weight 600 against it
+# matches the 700 face. Naming the semibold family first gives the browser
+# an exact match and leaves the base family as the fallback.
+.ekio_semibold_families <- c(
+  "Host Grotesk" = "Host Grotesk SemiBold"
+)
+
+# opt_table_font() appends the system stack to whatever family it is given.
+# tab_style() emits the family exactly as written, so a cell-level font needs
+# the same fallbacks added back or a missing family drops to the browser
+# default while the rest of the table drops to system-ui.
+.ekio_font_stack <- function(family) {
+  return(c(family, gt::default_fonts()))
+}
+
+# Assumes an already-resolved family name. Families that carry their own
+# semibold face pass through unchanged.
+.ekio_font_semibold <- function(family) {
+  semibold <- .ekio_semibold_families[family]
+  if (is.na(semibold)) {
+    return(family)
+  }
+  return(unname(c(semibold, family)))
+}
 
 # Resolution order: explicit family, then the ekiotable option, then the
 # ekioplot option so a user who themes their charts themes their tables,

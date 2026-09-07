@@ -22,3 +22,11 @@
       Error in `gt_theme_hokusai()`:
       ! `gridlines` must be TRUE or FALSE.
 
+---
+
+    Code
+      gt_theme_hokusai(tbl, reversed = NA)
+    Condition
+      Error in `gt_theme_hokusai()`:
+      ! `reversed` must be TRUE or FALSE.
+

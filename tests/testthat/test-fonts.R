@@ -30,6 +30,23 @@ test_that("an unknown family passes through unchanged", {
   expect_equal(.ekio_font("title", "Comic Sans MS"), "Comic Sans MS")
 })
 
+test_that("a cell-level stack keeps the system fallbacks behind the family", {
+  expect_equal(.ekio_font_stack("Lato"), c("Lato", gt::default_fonts()))
+  expect_equal(
+    .ekio_font_stack(c("Host Grotesk SemiBold", "Host Grotesk")),
+    c("Host Grotesk SemiBold", "Host Grotesk", gt::default_fonts())
+  )
+})
+
+test_that("a split-weight family gains its semibold name ahead of the base", {
+  expect_equal(
+    .ekio_font_semibold("Host Grotesk"),
+    c("Host Grotesk SemiBold", "Host Grotesk")
+  )
+  expect_equal(.ekio_font_semibold("Lato"), "Lato")
+  expect_equal(.ekio_font_semibold("Comic Sans MS"), "Comic Sans MS")
+})
+
 test_that("ekiotable options outrank ekioplot options", {
   local_font_options()
   withr::local_options(

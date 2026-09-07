@@ -2,12 +2,13 @@
 local_font_options <- function(.local_envir = parent.frame()) {
   withr::local_options(
     stats::setNames(
-      rep(list(NULL), 6),
+      rep(list(NULL), 7),
       c(
         "ekiotable.font_title",
         "ekiotable.font_body",
         "ekiotable.font_numeric",
         "ekiotable.font_labels",
+        "ekiotable.font_stub",
         "ekioplot.font_title",
         "ekioplot.font_text"
       )
@@ -47,4 +48,10 @@ grouped_tbl <- function() {
 summary_entries <- function(tbl, locname) {
   styles <- tbl[["_styles"]]
   return(styles[styles$locname == locname, c("colname", "styles")])
+}
+
+# tab_style() stores a font stack as one collapsed CSS string. The leading
+# families are what the theme chose; the tail is the system fallback.
+font_stack <- function(css) {
+  return(gsub("^'|'$", "", trimws(strsplit(css, ",")[[1]])))
 }

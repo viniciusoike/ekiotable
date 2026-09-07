@@ -7,11 +7,19 @@
 #' clean; color does not encode data values. No footer is added.
 #'
 #' @inheritParams gt_theme_ekio
+#' @param font_size Numeric. Body font size in pixels (default: 12). Column
+#'   labels and the subtitle are 2px larger, the title 8px larger, and source
+#'   notes and footnotes 1px smaller.
+#' @param font_stub A font family or registry key for stub (row label) cells.
+#'   `NULL` uses the `ekiotable.font_stub` option and then the resolved body
+#'   font, so row labels stay with the body typography unless you move them.
 #' @param palette One of `"mountain"` (default), `"wind"`, `"blossom"`, or
 #'   `"lake"`. Each uses blues and paper tones extracted from a different print.
 #' @param stripe Logical. Apply subtle alternating row shading (default: FALSE).
 #' @param gridlines Logical. Show light-gray horizontal and vertical cell rules
 #'   (default: FALSE). Section and outer accent rules remain visible.
+#' @param reversed Logical. Fill column labels and spanners with the palette blue
+#'   and use the palette paper color for their text and rules (default: FALSE).
 #' @details
 #' The palettes are stored as explicit hex values in `R/utils.R`. Mountain uses
 #' the supplied mountain landscape, wind the windy field, blossom the bullfinch
@@ -23,6 +31,11 @@
 #'
 #' Body text and column labels use dark gray; subtitles and notes use a softer
 #' dark gray. Blue emphasizes titles, group headings, and summaries.
+#'
+#' Column labels sit above the body in size and are set in semibold. Stub cells
+#' are also semibold. Families that ship semibold under a separate family name,
+#' such as Host Grotesk, are named in the label and stub font stacks so the
+#' weight resolves.
 #'
 #' Apply the theme before any cell-specific highlighting. Font arguments and
 #' options follow [gt_theme_ekio()].
@@ -40,13 +53,15 @@ gt_theme_hokusai <- function(
   data,
   palette = c("mountain", "wind", "blossom", "lake"),
   table_width = "100%",
-  font_size = 14,
+  font_size = 12,
   stripe = FALSE,
   font_title = NULL,
   font_body = NULL,
   font_numeric = NULL,
   font_labels = NULL,
-  gridlines = FALSE
+  font_stub = NULL,
+  gridlines = FALSE,
+  reversed = FALSE
 ) {
   if (!inherits(data, "gt_tbl")) {
     cli::cli_abort("{.arg data} must be a gt table object")
@@ -55,13 +70,38 @@ gt_theme_hokusai <- function(
   if (!is.logical(gridlines) || length(gridlines) != 1L || is.na(gridlines)) {
     cli::cli_abort("{.arg gridlines} must be TRUE or FALSE.")
   }
+  if (!is.logical(reversed) || length(reversed) != 1L || is.na(reversed)) {
+    cli::cli_abort("{.arg reversed} must be TRUE or FALSE.")
+  }
   grid_style <- if (gridlines) "solid" else "none"
 
-  .validate_gt_theme_args(table_width, font_size, stripe, add_footer = FALSE)
+  .validate_gt_theme_args(table_width, font_size, stripe)
   font_title <- .ekio_font("title", font_title)
   font_body <- .ekio_font("body", font_body)
   font_numeric <- .ekio_font("numeric", font_numeric, fallback = font_body)
-  font_labels <- .ekio_font("labels", font_labels, fallback = font_body)
+  font_labels <- .ekio_font_semibold(
+    .ekio_font("labels", font_labels, fallback = font_body)
+  )
+  # The stub follows the body font by default, so naming it here changes the
+  # weight the browser matches without moving row labels to another family.
+  font_stub <- .ekio_font_semibold(
+    .ekio_font("stub", font_stub, fallback = font_body)
+  )
+
+  # Cell-level fonts carry their own fallbacks. `font_body` stays bare because
+  # opt_table_font() appends the same stack itself.
+  stack_title <- .ekio_font_stack(font_title)
+  stack_body <- .ekio_font_stack(font_body)
+  stack_numeric <- .ekio_font_stack(font_numeric)
+  stack_labels <- .ekio_font_stack(font_labels)
+  stack_stub <- .ekio_font_stack(font_stub)
+
+  # Offsets from the body size so one argument scales the whole table. The
+  # column labels sit above the body rather than below it.
+  size_title <- font_size + 8
+  size_subtitle <- font_size + 2
+  size_labels <- font_size + 2
+  size_notes <- font_size - 1
 
   palette <- match.arg(palette)
   pal <- as.list(.hokusai_palettes[[palette]])
@@ -77,6 +117,9 @@ gt_theme_hokusai <- function(
     border = pal$gray_300,
     stripe_bg = pal$gray_100
   )
+  label_background <- if (reversed) pal$blue else pal$canvas
+  label_color <- if (reversed) pal$paper else colors$text_mid
+  label_rule <- if (reversed) pal$paper else colors$border
 
   styled_table <- data |>
     gt::opt_table_font(font = font_body) |>
@@ -96,26 +139,26 @@ gt_theme_hokusai <- function(
       stub.border.color = pal$gray_200,
       column_labels.vlines.style = grid_style,
       column_labels.vlines.width = gt::px(1),
-      column_labels.vlines.color = pal$gray_200,
+      column_labels.vlines.color = if (reversed) pal$paper else pal$gray_200,
       table_body.border.top.style = "none",
       table_body.border.bottom.style = "none",
 
       heading.background.color = pal$canvas,
-      heading.title.font.size = gt::px(font_size + 6),
+      heading.title.font.size = gt::px(size_title),
       heading.title.font.weight = "600",
-      heading.subtitle.font.size = gt::px(font_size),
+      heading.subtitle.font.size = gt::px(size_subtitle),
       heading.border.bottom.style = "solid",
       heading.border.bottom.width = gt::px(1),
       heading.border.bottom.color = colors$editorial,
 
-      column_labels.background.color = pal$canvas,
-      column_labels.font.size = gt::px(font_size - 1),
+      column_labels.background.color = label_background,
+      column_labels.font.size = gt::px(size_labels),
       column_labels.font.weight = "600",
       column_labels.padding = gt::px(10),
       column_labels.border.top.style = "none",
       column_labels.border.bottom.style = "solid",
       column_labels.border.bottom.width = gt::px(1),
-      column_labels.border.bottom.color = colors$border,
+      column_labels.border.bottom.color = label_rule,
 
       # A rule above and no fill. The group heading reads as a heading
       # because of its weight and color, not because of a band.
@@ -152,40 +195,40 @@ gt_theme_hokusai <- function(
       table.border.left.style = "none",
       table.border.right.style = "none",
 
-      source_notes.font.size = gt::px(font_size - 3),
+      source_notes.font.size = gt::px(size_notes),
       source_notes.border.lr.style = "none",
       source_notes.padding = gt::px(10),
       source_notes.background.color = pal$canvas,
 
-      footnotes.font.size = gt::px(font_size - 3),
+      footnotes.font.size = gt::px(size_notes),
       footnotes.padding = gt::px(8),
       footnotes.background.color = pal$canvas
     ) |>
     gt::tab_style(
       style = list(
         gt::cell_text(
-          color = colors$text_mid,
+          color = label_color,
           weight = "600",
-          font = font_labels
+          font = stack_labels
         ),
-        gt::cell_fill(color = pal$canvas)
+        gt::cell_fill(color = label_background)
       ),
       locations = gt::cells_column_labels()
     ) |>
     gt::tab_style(
       style = list(
         gt::cell_text(
-          color = colors$text_mid,
+          color = label_color,
           weight = "700",
-          font = font_labels
+          font = stack_labels
         ),
-        gt::cell_fill(color = pal$canvas)
+        gt::cell_fill(color = label_background)
       ),
       locations = gt::cells_column_spanners()
     ) |>
     gt::tab_style(
       style = gt::cell_text(
-        font = font_title,
+        font = stack_title,
         color = colors$title,
         weight = "600",
         align = "left"
@@ -194,10 +237,10 @@ gt_theme_hokusai <- function(
     ) |>
     gt::tab_style(
       style = gt::cell_text(
-        font = font_body,
+        font = stack_body,
         color = colors$text_light,
         weight = "normal",
-        size = gt::px(font_size),
+        size = gt::px(size_subtitle),
         align = "left"
       ),
       locations = gt::cells_title(groups = "subtitle")
@@ -205,11 +248,15 @@ gt_theme_hokusai <- function(
     # No stub fill. A mid-tone keeps the row label below the group heading
     # and above nothing, which is the level it occupies.
     gt::tab_style(
-      style = gt::cell_text(color = colors$text_mid, weight = "600"),
+      style = gt::cell_text(
+        color = colors$text_mid,
+        weight = "600",
+        font = stack_stub
+      ),
       locations = gt::cells_stub()
     ) |>
     gt::tab_style(
-      style = gt::cell_text(font = font_numeric),
+      style = gt::cell_text(font = stack_numeric),
       locations = gt::cells_body(columns = tidyselect::where(is.numeric))
     ) |>
     gt::tab_style(
