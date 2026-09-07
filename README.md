@@ -1,10 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-[![](https://www.r-pkg.org/badges/version/ekiotable)](https://cran.r-project.org/package=ekiotable)
-[![CRAN
-checks](https://badges.cranchecks.info/worst/ekiotable.svg)](https://cran.r-project.org/web/checks/check_results_ekiotable.html)
-
 # ekiotable
 
 ekiotable applies the EKIO visual identity to
@@ -13,19 +9,12 @@ used across EKIO charts and reports.
 
 ## Installation
 
-ekiotable is not on CRAN. Install it from GitHub with remotes. Its only
-non-CRAN dependency,
-[ekioplot](https://github.com/viniciusoike/ekioplot), must be installed
-first, because remotes resolves dependencies from CRAN only.
-
-``` r
-# install.packages("remotes")
-remotes::install_github("viniciusoike/ekioplot")
-remotes::install_github("viniciusoike/ekiotable")
-```
-
-Alternatively, install both packages from the [viniciusoike
-r-universe](https://viniciusoike.r-universe.dev) in a single call:
+ekiotable and its only non-CRAN dependency,
+[ekioplot](https://github.com/viniciusoike/ekioplot), ship from the
+[viniciusoike r-universe](https://viniciusoike.r-universe.dev). Neither
+package is on CRAN. The command below installs both;
+`install.packages()` resolves `ekioplot` from the same universe
+automatically.
 
 ``` r
 install.packages(
