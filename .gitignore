@@ -6,3 +6,7 @@ docs/
 *.Rcheck/
 .DS_Store
 refs/*
+IMPLEMENTATION-PLAN.md
+.Rprofile
+README.html
+docs
