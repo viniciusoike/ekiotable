@@ -1,15 +1,15 @@
 # GT table theme ------------------------------------------------------------
 
-#' Apply EKIO Theme to GT Tables
+#' Apply the EKIO Theme to GT Tables
 #'
-#' Professional EKIO branding and styling for gt table objects.
+#' EKIO styling for gt table objects. It uses a blue column-label band, Baltic
+#' Blue rules above unfilled group headings, and tabular figures for body
+#' numerals. No footer is added.
 #'
-#' @param data A gt table object
-#' @param table_width Character. Width of the table (default: "100%")
-#' @param font_size Numeric. Base font size in pixels (default: 14)
-#' @param stripe Logical. Apply alternating row striping (default: TRUE)
-#' @param add_footer Logical. Add automatic EKIO footer (default: TRUE)
-#'
+#' @param data A gt table object.
+#' @param table_width Character. Width of the table (default: `"100%"`).
+#' @param font_size Numeric. Base font size in pixels (default: 14).
+#' @param stripe Logical. Apply alternating row striping (default: `TRUE`).
 #' @param font_title,font_body,font_numeric,font_labels A font family or registry
 #'   key (`lora`, `lato`, `georgia`, `roboto_slab`, `fira_code`, `host_grotesk`).
 #'   `NULL` uses the corresponding `ekiotable.font_<role>` option. Title and body
@@ -18,7 +18,7 @@
 #'   body font unless explicitly set or configured through their role option.
 #'   Fonts must be available to the renderer; this function does not install them.
 #'
-#' @return A styled gt table object
+#' @return A styled gt table object.
 #' @export
 #'
 #' @examples
@@ -26,12 +26,15 @@
 #' head(mtcars, 10) |>
 #'   gt() |>
 #'   gt_theme_ekio()
+
+# Two blues carry two jobs. Baltic Blue is the editorial voice: title and
+# row group headings. Blue 700 is structure: the column label slab and the
+# emphasis on summary values.
 gt_theme_ekio <- function(
   data,
   table_width = "100%",
   font_size = 14,
   stripe = TRUE,
-  add_footer = TRUE,
   font_title = NULL,
   font_body = NULL,
   font_numeric = NULL,
@@ -41,24 +44,24 @@ gt_theme_ekio <- function(
     cli::cli_abort("{.arg data} must be a gt table object")
   }
 
-  .validate_gt_theme_args(table_width, font_size, stripe, add_footer)
+  .validate_gt_theme_args(table_width, font_size, stripe)
   font_title <- .ekio_font("title", font_title)
   font_body <- .ekio_font("body", font_body)
   font_numeric <- .ekio_font("numeric", font_numeric, fallback = font_body)
   font_labels <- .ekio_font("labels", font_labels, fallback = font_body)
 
-  # Reference brand tokens directly to stay in sync with any future changes
   colors <- list(
-    primary = .ekio("blue", 700), # headers, accents
-    primary_dark = .ekio("blue", 800), # grand summary background
-    primary_light = .ekio("blue", 100), # summary row tint
-    row_group_bg = .ekio("blue", 100), # row group label background
+    title = .ekio("blue", 900),
+    editorial = .ekio("ekio_brand", "Baltic Blue"),
+    structure = .ekio("blue", 700),
+    structure_dark = .ekio("blue", 800),
+    structure_light = .ekio("ekio_brand", "Soft Linen 2"),
     text = .ekio("gray", 900),
     text_mid = .ekio("gray", 700),
     text_light = .ekio("gray", 600),
-    border = .ekio("gray", 300),
-    stripe_bg = .ekio("gray", 200), # striping, one step off light_bg
-    light_bg = .ekio("gray", 100)
+    border = .ekio("stone", 300),
+    stripe_bg = .ekio("stone", 100),
+    note_bg = .ekio("ekio_brand", "Soft Linen 2")
   )
 
   styled_table <- data |>
@@ -67,20 +70,16 @@ gt_theme_ekio <- function(
       table.width = table_width,
       table.font.size = gt::px(font_size),
       table.font.color = colors$text,
-      table.font.weight = "normal",
-      table.background.color = colors$light_bg,
 
       heading.background.color = .ekio("basic", "white"),
       heading.title.font.size = gt::px(font_size + 6),
       heading.title.font.weight = "600",
       heading.subtitle.font.size = gt::px(font_size),
-      heading.subtitle.font.weight = "normal",
-      heading.padding = gt::px(8),
       heading.border.bottom.style = "solid",
       heading.border.bottom.width = gt::px(3),
-      heading.border.bottom.color = colors$primary,
+      heading.border.bottom.color = colors$editorial,
 
-      column_labels.background.color = colors$primary,
+      column_labels.background.color = colors$structure,
       column_labels.font.size = gt::px(font_size - 1),
       column_labels.font.weight = "600",
       column_labels.padding = gt::px(10),
@@ -89,80 +88,71 @@ gt_theme_ekio <- function(
       column_labels.border.bottom.width = gt::px(2),
       column_labels.border.bottom.color = colors$border,
 
-      row_group.background.color = colors$row_group_bg,
-      row_group.font.weight = "600",
-      row_group.padding = gt::px(6),
+      # A rule above and no fill. The group heading reads as a heading
+      # because of its weight and color, not because of a band.
+      row_group.font.weight = "700",
+      row_group.padding = gt::px(10),
       row_group.border.top.style = "solid",
-      row_group.border.top.width = gt::px(1),
-      row_group.border.top.color = colors$border,
-      row_group.border.bottom.style = "solid",
-      row_group.border.bottom.width = gt::px(1),
-      row_group.border.bottom.color = colors$border,
+      row_group.border.top.width = gt::px(2),
+      row_group.border.top.color = colors$editorial,
+      row_group.border.bottom.style = "none",
 
-      stub.background.color = colors$stripe_bg,
       stub.font.weight = "600",
-      stub.border.style = "solid",
-      stub.border.width = gt::px(1),
-      stub.border.color = colors$border,
 
       data_row.padding = gt::px(8),
       row.striping.include_table_body = stripe,
       row.striping.background_color = colors$stripe_bg,
 
-      summary_row.background.color = colors$primary_light,
+      summary_row.background.color = colors$structure_light,
       summary_row.padding = gt::px(8),
-      summary_row.border.style = "solid",
-      summary_row.border.width = gt::px(1),
-      summary_row.border.color = colors$border,
+      summary_row.border.style = "none",
 
-      grand_summary_row.background.color = colors$primary_dark,
+      grand_summary_row.background.color = colors$structure_dark,
       grand_summary_row.padding = gt::px(8),
       grand_summary_row.border.style = "solid",
       grand_summary_row.border.width = gt::px(2),
-      grand_summary_row.border.color = colors$primary,
+      grand_summary_row.border.color = colors$structure,
 
       table.border.top.style = "solid",
       table.border.top.width = gt::px(2),
-      table.border.top.color = colors$primary,
+      table.border.top.color = colors$editorial,
       table.border.bottom.style = "solid",
       table.border.bottom.width = gt::px(3),
-      table.border.bottom.color = colors$primary,
+      table.border.bottom.color = colors$editorial,
       table.border.left.style = "none",
       table.border.right.style = "none",
 
       source_notes.font.size = gt::px(font_size - 3),
       source_notes.border.lr.style = "none",
       source_notes.padding = gt::px(10),
-      source_notes.background.color = colors$light_bg,
+      # source_notes.background.color = colors$note_bg,
 
       footnotes.font.size = gt::px(font_size - 3),
-      footnotes.padding = gt::px(8),
-      footnotes.background.color = colors$light_bg
+      footnotes.padding = gt::px(8)
+      # footnotes.background.color = colors$note_bg
     ) |>
-    # Column labels: white text on primary blue
     gt::tab_style(
       style = list(
         gt::cell_text(
-          color = ekioplot::ekio_text_on(colors$primary),
+          color = ekioplot::ekio_text_on(colors$structure),
           weight = "600",
           font = font_labels
         ),
-        gt::cell_fill(color = colors$primary)
+        gt::cell_fill(color = colors$structure)
       ),
       locations = gt::cells_column_labels()
     ) |>
-    # Spanner labels: same treatment as column labels
     gt::tab_style(
       style = list(
         gt::cell_text(
+          color = ekioplot::ekio_text_on(colors$structure),
           weight = "700",
-          color = ekioplot::ekio_text_on(colors$primary)
+          font = font_labels
         ),
-        gt::cell_fill(color = colors$primary)
+        gt::cell_fill(color = colors$structure)
       ),
       locations = gt::cells_column_spanners()
     ) |>
-    # Subtle bottom border on every body row
     gt::tab_style(
       style = gt::cell_borders(
         sides = "bottom",
@@ -171,19 +161,18 @@ gt_theme_ekio <- function(
       ),
       locations = gt::cells_body()
     ) |>
-    # Table title: primary blue, bold, left-aligned
     gt::tab_style(
       style = gt::cell_text(
-        color = colors$primary,
         font = font_title,
+        color = colors$title,
         weight = "600",
         align = "left"
       ),
       locations = gt::cells_title(groups = "title")
     ) |>
-    # Subtitle: muted, smaller, left-aligned
     gt::tab_style(
       style = gt::cell_text(
+        font = font_body,
         color = colors$text_light,
         weight = "normal",
         size = gt::px(font_size),
@@ -191,7 +180,8 @@ gt_theme_ekio <- function(
       ),
       locations = gt::cells_title(groups = "subtitle")
     ) |>
-    # Stub: mid-tone text
+    # No stub fill. A mid-tone keeps the row label below the group heading
+    # and above nothing, which is the level it occupies.
     gt::tab_style(
       style = gt::cell_text(color = colors$text_mid, weight = "600"),
       locations = gt::cells_stub()
@@ -201,7 +191,7 @@ gt_theme_ekio <- function(
       locations = gt::cells_body(columns = tidyselect::where(is.numeric))
     ) |>
     gt::tab_style(
-      style = gt::cell_text(color = colors$primary, weight = "600"),
+      style = gt::cell_text(color = colors$editorial, weight = "700"),
       locations = gt::cells_row_groups()
     ) |>
     gt::tab_style(
@@ -211,36 +201,51 @@ gt_theme_ekio <- function(
     gt::tab_style(
       style = gt::cell_text(color = colors$text_light),
       locations = gt::cells_footnotes()
+    ) |>
+    # gt inlines this into each matching element rather than emitting a
+    # document-level rule, so it cannot reach another table on the page.
+    gt::opt_css(
+      css = ".gt_row { font-variant-numeric: tabular-nums lining-nums; }",
+      add = TRUE
     )
 
   # gt errors on missing summaries. Apply each group separately so a group
   # without summaries cannot discard styles for groups that have them.
   # TRUE avoids gt 1.3.0's everything() resolution error for summary rows.
+  summary_style <- gt::cell_text(color = colors$structure, weight = "700")
   for (group in unique(data[["_stub_df"]]$group_id)) {
     styled_table <- tryCatch(
       gt::tab_style(
         styled_table,
-        style = gt::cell_text(color = colors$primary, weight = "600"),
+        style = summary_style,
         locations = gt::cells_summary(groups = group, rows = TRUE)
       ),
       error = function(e) styled_table
     )
-  }
-  styled_table <- tryCatch(
-    gt::tab_style(
-      styled_table,
-      style = gt::cell_text(
-        color = ekioplot::ekio_text_on(colors$primary_dark),
-        weight = "700"
+    # The stub label of a summary row is a separate location. Without this
+    # the label stays body-colored while its own value is emphasized.
+    styled_table <- tryCatch(
+      gt::tab_style(
+        styled_table,
+        style = summary_style,
+        locations = gt::cells_stub_summary(groups = group, rows = TRUE)
       ),
-      locations = gt::cells_grand_summary(rows = TRUE)
-    ),
-    error = function(e) styled_table
-  )
+      error = function(e) styled_table
+    )
+  }
 
-  if (add_footer) {
-    styled_table <- styled_table |>
-      gt::tab_source_note(source_note = "EKIO")
+  grand_style <- gt::cell_text(
+    color = ekioplot::ekio_text_on(colors$structure_dark),
+    weight = "700"
+  )
+  for (location in list(
+    gt::cells_grand_summary(rows = TRUE),
+    gt::cells_stub_grand_summary(rows = TRUE)
+  )) {
+    styled_table <- tryCatch(
+      gt::tab_style(styled_table, style = grand_style, locations = location),
+      error = function(e) styled_table
+    )
   }
 
   return(styled_table)
@@ -252,7 +257,6 @@ gt_theme_ekio <- function(
   table_width,
   font_size,
   stripe,
-  add_footer,
   call = parent.frame()
 ) {
   if (
@@ -277,11 +281,8 @@ gt_theme_ekio <- function(
       call = call
     )
   }
-  for (arg in c("stripe", "add_footer")) {
-    value <- get(arg)
-    if (!is.logical(value) || length(value) != 1L || is.na(value)) {
-      cli::cli_abort("{.arg {arg}} must be TRUE or FALSE.", call = call)
-    }
+  if (!is.logical(stripe) || length(stripe) != 1L || is.na(stripe)) {
+    cli::cli_abort("{.arg stripe} must be TRUE or FALSE.", call = call)
   }
   invisible(NULL)
 }

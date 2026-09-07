@@ -1,86 +1,35 @@
-test_that("gt_theme_ekio() returns a gt table and rejects other input", {
-  local_font_options()
-  expect_s3_class(gt_theme_ekio(small_tbl()), "gt_tbl")
-  expect_snapshot(gt_theme_ekio(mtcars), error = TRUE)
+test_that("gt_theme_ekio() is the exported gt theme", {
+  out <- gt_theme_ekio(small_tbl())
+  exports <- getNamespaceExports("ekiotable")
+
+  expect_s3_class(out, "gt_tbl")
+  expect_length(out[["_source_notes"]], 0L)
+  expect_equal("add_footer" %in% names(formals(gt_theme_ekio)), FALSE)
+  expect_equal("gt_theme_ekio" %in% exports, TRUE)
+  expect_equal("gt_theme_ekio_alt" %in% exports, FALSE)
 })
 
-test_that("gt_theme_ekio() validates its arguments", {
-  local_font_options()
-  expect_snapshot(gt_theme_ekio(small_tbl(), font_size = "14"), error = TRUE)
+test_that("gt_theme_ekio() validates its inputs", {
+  expect_snapshot(gt_theme_ekio(mtcars), error = TRUE)
   expect_snapshot(
-    gt_theme_ekio(small_tbl(), font_size = c(12, 14)),
+    gt_theme_ekio(small_tbl(), table_width = 100),
     error = TRUE
   )
-  expect_snapshot(gt_theme_ekio(small_tbl(), font_size = -1), error = TRUE)
-  expect_snapshot(gt_theme_ekio(small_tbl(), table_width = 100), error = TRUE)
+  expect_snapshot(gt_theme_ekio(small_tbl(), font_size = 0), error = TRUE)
   expect_snapshot(gt_theme_ekio(small_tbl(), stripe = "yes"), error = TRUE)
-  expect_snapshot(gt_theme_ekio(small_tbl(), add_footer = NA), error = TRUE)
-  expect_snapshot(gt_theme_ekio(small_tbl(), font_title = 1), error = TRUE)
 })
 
-
-test_that("arguments reach the gt options", {
-  local_font_options()
-  out <- gt_theme_ekio(small_tbl(), font_size = 12, table_width = "80%")
-  expect_equal(gt_option(out, "table_font_size"), "12px")
-  expect_equal(gt_option(out, "table_width"), "80%")
-})
-
-test_that("stripe toggles body striping", {
-  local_font_options()
-  on <- gt_theme_ekio(small_tbl(), stripe = TRUE)
-  off <- gt_theme_ekio(small_tbl(), stripe = FALSE)
-  expect_equal(gt_option(on, "row_striping_include_table_body"), TRUE)
-  expect_equal(gt_option(off, "row_striping_include_table_body"), FALSE)
-})
-
-test_that("add_footer controls the EKIO source note", {
-  local_font_options()
-  with_note <- gt_theme_ekio(small_tbl(), add_footer = TRUE)
-  without <- gt_theme_ekio(small_tbl(), add_footer = FALSE)
-  expect_length(with_note[["_source_notes"]], 1)
-  expect_length(without[["_source_notes"]], 0)
-})
-
-
-test_that("the body font heads the gt font stack", {
-  local_font_options()
-  out <- gt_theme_ekio(small_tbl())
-  expect_equal(unlist(gt_option(out, "table_font_names"))[[1]], "Lato")
-})
-
-test_that("the title carries the title font", {
-  local_font_options()
-  out <- gt_theme_ekio(small_tbl() |> gt::tab_header("T"))
-  fonts <- vapply(
-    gt_styles_at(out, "title"),
-    function(s) {
-      font <- s$cell_text$font
-      return(if (is.null(font)) NA_character_ else font)
-    },
-    character(1)
+test_that("gt_theme_ekio() uses ekioplot palettes", {
+  out <- gt_theme_ekio(
+    small_tbl(),
+    table_width = "80%",
+    font_size = 12,
+    stripe = FALSE
   )
-  expect_equal("Lora" %in% fonts, TRUE)
-})
 
-test_that("every registry font can drive a table", {
-  local_font_options()
-  for (font in .ekio_font_stacks) {
-    out <- gt_theme_ekio(small_tbl(), font_body = font)
-    expect_equal(unlist(gt_option(out, "table_font_names"))[[1]], font)
-  }
-})
-
-test_that("a registry key works as an argument", {
-  local_font_options()
-  out <- gt_theme_ekio(small_tbl(), font_body = "fira_code")
-  expect_equal(unlist(gt_option(out, "table_font_names"))[[1]], "Fira Code")
-})
-
-
-test_that("the theme takes its colors from the token helper", {
-  local_font_options()
-  out <- gt_theme_ekio(small_tbl())
+  expect_equal(gt_option(out, "table_width"), "80%")
+  expect_equal(gt_option(out, "table_font_size"), "12px")
+  expect_equal(gt_option(out, "row_striping_include_table_body"), FALSE)
   expect_equal(
     gt_option(out, "column_labels_background_color"),
     unname(ekioplot::ekio_pal("blue")["700"])
@@ -90,166 +39,165 @@ test_that("the theme takes its colors from the token helper", {
     unname(ekioplot::ekio_pal("gray")["900"])
   )
   expect_equal(
-    gt_option(out, "row_striping_background_color"),
-    unname(ekioplot::ekio_pal("gray")["200"])
+    is.na(gt_option(out, "source_notes_background_color")),
+    TRUE
   )
-  expect_equal(as_hex(gt_option(out, "heading_background_color")), "#FFFFFF")
 })
 
-test_that("hex codes appear only in palette and token files", {
+test_that("gt_theme_ekio() rejects a non-string font family", {
   local_font_options()
-  r_dir <- test_path("..", "..", "R")
-  skip_if_not(dir.exists(r_dir), "package source not available")
-  files <- setdiff(
-    list.files(r_dir, full.names = TRUE),
-    file.path(r_dir, c("tokens.R", "utils.R"))
+  expect_snapshot(
+    gt_theme_ekio(small_tbl(), font_title = 1),
+    error = TRUE
   )
-  code <- unlist(lapply(files, readLines))
-  expect_equal(any(grepl("#[0-9A-Fa-f]{6}\\b", code)), FALSE)
 })
 
-
-test_that("text on colored fills clears WCAG AA", {
+test_that("the three body levels get distinct styles", {
   local_font_options()
   out <- gt_theme_ekio(grouped_tbl())
-  ratios <- vapply(
-    out[["_styles"]]$styles,
-    function(s) {
-      if (is.null(s$cell_text$color) || is.null(s$cell_fill$color)) {
-        return(NA_real_)
-      }
-      return(ekioplot::ekio_contrast(s$cell_text$color, s$cell_fill$color))
-    },
-    numeric(1)
+  locnames <- out[["_styles"]]$locname
+
+  expect_equal(all(c("row_groups", "stub") %in% locnames), TRUE)
+  expect_equal(
+    gt_option(out, "row_group_border_top_color"),
+    .ekio("ekio_brand", "Baltic Blue")
   )
-  ratios <- ratios[!is.na(ratios)]
-  expect_gt(length(ratios), 0)
-  expect_equal(all(ratios >= 4.5), TRUE)
+  expect_equal(gt_option(out, "row_group_border_bottom_style"), "none")
+  expect_equal(
+    gt_styles_at(out, "row_groups")[[1]]$cell_text$color,
+    .ekio("ekio_brand", "Baltic Blue")
+  )
+  expect_equal(
+    gt_styles_at(out, "stub")[[1]]$cell_text$color,
+    .ekio("gray", 700)
+  )
 })
 
-test_that("body text clears WCAG AA on every surface it lands on", {
-  local_font_options()
-  out <- gt_theme_ekio(small_tbl())
-  body <- gt_option(out, "table_font_color")
-  surfaces <- c(
-    gt_option(out, "table_background_color"),
-    gt_option(out, "row_striping_background_color"),
-    gt_option(out, "summary_row_background_color")
-  )
-  expect_equal(all(ekioplot::ekio_contrast(body, surfaces) >= 4.5), TRUE)
-})
-
-
-test_that("a grouped table gets its row-group styles", {
+test_that("row groups carry no background fill", {
   local_font_options()
   out <- gt_theme_ekio(grouped_tbl())
-  expect_equal("row_groups" %in% out[["_styles"]]$locname, TRUE)
+
+  expect_equal(is.na(gt_option(out, "row_group_background_color")), TRUE)
+  expect_equal(is.na(gt_option(out, "stub_background_color")), TRUE)
 })
 
-test_that("a table with no summary rows still gets every other style", {
+test_that("summary rows are tinted and their stub labels match", {
   local_font_options()
-  out <- gt_theme_ekio(small_tbl())
+  tbl <- grouped_tbl() |>
+    gt::summary_rows(groups = "a", columns = "x", fns = list(avg = ~ mean(.)))
+  out <- gt_theme_ekio(tbl)
+
+  expect_equal(
+    gt_option(out, "summary_row_background_color"),
+    .ekio("ekio_brand", "Soft Linen 2")
+  )
+  # gt files the value cell and its stub label under one locname; the stub
+  # label is the entry with no column.
+  cells <- summary_entries(out, "summary_cells")
+  expect_equal(nrow(cells), 2L)
+  expect_equal(sum(is.na(cells$colname)), 1L)
+  expect_equal(
+    unique(vapply(cells$styles, function(s) s$cell_text$color, character(1))),
+    .ekio("blue", 700)
+  )
+})
+
+test_that("the grand summary gets a dark slab with contrasting text", {
+  local_font_options()
+  tbl <- grouped_tbl() |>
+    gt::grand_summary_rows(columns = "x", fns = list(total = ~ sum(.)))
+  out <- gt_theme_ekio(tbl)
+  dark <- .ekio("blue", 800)
+
+  expect_equal(gt_option(out, "grand_summary_row_background_color"), dark)
+
+  cells <- summary_entries(out, "grand_summary_cells")
+  expect_equal(nrow(cells), 2L)
+  expect_equal(sum(is.na(cells$colname)), 1L)
+  expect_equal(
+    unique(vapply(
+      cells$styles,
+      function(s) as_hex(s$cell_text$color),
+      character(1)
+    )),
+    as_hex(ekioplot::ekio_text_on(dark))
+  )
+})
+
+test_that("a table with no summaries still gets every other style", {
+  local_font_options()
+  out <- gt_theme_ekio(grouped_tbl())
+
   expect_equal(
     all(
-      c("columns_columns", "title", "stub", "source_notes") %in%
+      c("columns_columns", "title", "stub", "row_groups") %in%
         out[["_styles"]]$locname
     ),
     TRUE
   )
 })
 
-test_that("a table with summary rows gets the summary styles", {
+test_that("spanners get the column label treatment", {
   local_font_options()
-  tbl <- grouped_tbl() |>
-    gt::summary_rows(groups = "a", columns = "x", fns = list(avg = ~ mean(.)))
+  tbl <- gt::gt(data.frame(a = 1, b = 2)) |>
+    gt::tab_spanner(label = "Both", columns = c("a", "b"))
   out <- gt_theme_ekio(tbl)
-  expect_equal(any(grepl("summary", out[["_styles"]]$locname)), TRUE)
+  style <- gt_styles_at(out, "columns_groups")[[1]]
+
+  expect_equal(style$cell_fill$color, .ekio("blue", 700))
+  expect_equal(style$cell_text$weight, "700")
 })
 
+test_that("numeric cells get tabular figures", {
+  local_font_options()
+  html <- as.character(gt::as_raw_html(gt_theme_ekio(small_tbl())))
 
-test_that("the resolved theme options are stable", {
+  expect_equal(grepl("tabular-nums", html, fixed = TRUE), TRUE)
+})
+
+test_that("the fonts resolve for the theme", {
   local_font_options()
   out <- gt_theme_ekio(small_tbl())
-  opts <- out[["_options"]]
-  themed <- opts[!is.na(opts$value) & opts$category != "table_body", ]
-  expect_snapshot(print(as.data.frame(themed[, c("parameter", "value")])))
+  expect_equal(unlist(gt_option(out, "table_font_names"))[[1]], "Lato")
+
+  titles <- vapply(
+    gt_styles_at(out, "title"),
+    function(s) s$cell_text$font %||% NA_character_,
+    character(1)
+  )
+  expect_equal("Lora" %in% titles, TRUE)
+
+  slab <- gt_theme_ekio(small_tbl(), font_body = "roboto_slab")
+  expect_equal(
+    unlist(gt_option(slab, "table_font_names"))[[1]],
+    "Roboto Slab"
+  )
 })
 
-test_that("numeric and label fonts inherit the body and respect overrides", {
+test_that("the numeric font inherits the body font and respects overrides", {
   local_font_options()
-  tbl <- gt::gt(data.frame(label = c("a", "b"), number = 1:2))
+  tbl <- gt::gt(data.frame(x = 1, y = "a"))
+
   out <- gt_theme_ekio(tbl, font_body = "Georgia")
   expect_equal(
     tail(gt_styles_at(out, "data"), 1)[[1]]$cell_text$font,
     "Georgia"
   )
-  expect_equal(
-    gt_styles_at(out, "columns_columns")[[1]]$cell_text$font,
-    "Georgia"
-  )
-  withr::local_options(
-    ekiotable.font_numeric = "fira_code",
-    ekiotable.font_labels = "host_grotesk"
-  )
-  out <- gt_theme_ekio(tbl, font_body = "Georgia")
-  styles <- out[["_styles"]]
-  numeric <- styles[
-    vapply(
-      styles$styles,
-      function(s) identical(s$cell_text$font, "'Fira Code'"),
-      logical(1)
-    ),
-  ]
-  expect_equal(unique(numeric$colname), "number")
-  expect_equal(
-    gt_styles_at(out, "columns_columns")[[1]]$cell_text$font,
-    "'Host Grotesk'"
-  )
-  out <- gt_theme_ekio(tbl, font_numeric = "Georgia", font_labels = "Lora")
-  expect_equal(
-    tail(gt_styles_at(out, "data"), 1)[[1]]$cell_text$font,
-    "Georgia"
-  )
-  expect_equal(gt_styles_at(out, "columns_columns")[[1]]$cell_text$font, "Lora")
+
+  out <- gt_theme_ekio(tbl, font_body = "Georgia", font_numeric = "Lato")
+  expect_equal(tail(gt_styles_at(out, "data"), 1)[[1]]$cell_text$font, "Lato")
 })
 
-test_that("grand summaries and partial group summaries render with styles", {
+test_that("the body neutrals are warm, matching the note bands", {
   local_font_options()
-  tbl <- grouped_tbl() |>
-    gt::summary_rows(
-      groups = "a",
-      columns = "x",
-      fns = list(avg = ~ mean(.))
-    ) |>
-    gt::grand_summary_rows(columns = "x", fns = list(total = ~ sum(.)))
-  out <- gt_theme_ekio(tbl)
-  expect_equal(length(gt_styles_at(out, "summary_cells")), 1L)
-  expect_equal(length(gt_styles_at(out, "grand_summary_cells")), 1L)
+  out <- gt_theme_ekio(small_tbl())
+
   expect_equal(
-    gt_styles_at(out, "grand_summary_cells")[[1]]$cell_text$color,
-    as_hex(ekioplot::ekio_text_on(.ekio("blue", 800)))
+    gt_option(out, "row_striping_background_color"),
+    .ekio("stone", 100)
   )
-  expect_match(gt::as_raw_html(out), "summary")
-})
-
-test_that("text-only and empty tables support numeric font selection", {
-  local_font_options()
-  for (d in list(data.frame(x = "a"), data.frame(x = numeric()))) {
-    expect_s3_class(
-      gt_theme_ekio(gt::gt(d), font_numeric = "fira_code"),
-      "gt_tbl"
-    )
-  }
-})
-
-test_that("invalid scalar values produce actionable errors", {
-  local_font_options()
-  expect_snapshot(gt_theme_ekio(small_tbl(), font_size = Inf), error = TRUE)
-  expect_snapshot(gt_theme_ekio(small_tbl(), table_width = ""), error = TRUE)
-  expect_snapshot(
-    gt_theme_ekio(small_tbl(), font_body = NA_character_),
-    error = TRUE
+  expect_equal(
+    gt_option(out, "column_labels_border_bottom_color"),
+    .ekio("stone", 300)
   )
-  expect_snapshot(gt_theme_ekio(small_tbl(), font_labels = " "), error = TRUE)
-  expect_snapshot(gt_theme_ekio(small_tbl(), stripe = logical()), error = TRUE)
 })

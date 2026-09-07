@@ -2,14 +2,13 @@
 % Please edit documentation in R/gt_theme.R
 \name{gt_theme_ekio}
 \alias{gt_theme_ekio}
-\title{Apply EKIO Theme to GT Tables}
+\title{Apply the EKIO Theme to GT Tables}
 \usage{
 gt_theme_ekio(
   data,
   table_width = "100\%",
   font_size = 14,
   stripe = TRUE,
-  add_footer = TRUE,
   font_title = NULL,
   font_body = NULL,
   font_numeric = NULL,
@@ -17,15 +16,13 @@ gt_theme_ekio(
 )
 }
 \arguments{
-\item{data}{A gt table object}
+\item{data}{A gt table object.}
 
-\item{table_width}{Character. Width of the table (default: "100\%")}
+\item{table_width}{Character. Width of the table (default: \code{"100\%"}).}
 
-\item{font_size}{Numeric. Base font size in pixels (default: 14)}
+\item{font_size}{Numeric. Base font size in pixels (default: 14).}
 
-\item{stripe}{Logical. Apply alternating row striping (default: TRUE)}
-
-\item{add_footer}{Logical. Add automatic EKIO footer (default: TRUE)}
+\item{stripe}{Logical. Apply alternating row striping (default: \code{TRUE}).}
 
 \item{font_title, font_body, font_numeric, font_labels}{A font family or registry
 key (\code{lora}, \code{lato}, \code{georgia}, \code{roboto_slab}, \code{fira_code}, \code{host_grotesk}).
@@ -36,10 +33,12 @@ body font unless explicitly set or configured through their role option.
 Fonts must be available to the renderer; this function does not install them.}
 }
 \value{
-A styled gt table object
+A styled gt table object.
 }
 \description{
-Professional EKIO branding and styling for gt table objects.
+EKIO styling for gt table objects. It uses a blue column-label band, Baltic
+Blue rules above unfilled group headings, and tabular figures for body
+numerals. No footer is added.
 }
 \examples{
 library(gt)
