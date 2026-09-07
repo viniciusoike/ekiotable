@@ -1,0 +1,392 @@
+@import url("https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500;600;700&display=swap");
+
+/* Keep the rendered Bootstrap state inside the EKIO palette. */
+
+:root {
+  --bs-body-color: #191A1C;
+  --bs-body-color-rgb: 25, 26, 28;
+  --bs-body-bg: #FFFFFF;
+  --bs-body-bg-rgb: 255, 255, 255;
+  --bs-emphasis-color: #191A1C;
+  --bs-emphasis-color-rgb: 25, 26, 28;
+  --bs-secondary-color: #6E7378;
+  --bs-secondary-color-rgb: 110, 115, 120;
+  --bs-secondary-bg: #F2F3F5;
+  --bs-secondary-bg-rgb: 242, 243, 245;
+  --bs-tertiary-bg: #F2F3F5;
+  --bs-tertiary-bg-rgb: 242, 243, 245;
+  --bs-heading-color: #191A1C;
+  --bs-link-color: #1E3A5F;
+  --bs-link-color-rgb: 30, 58, 95;
+  --bs-link-hover-color: #305687;
+  --bs-link-hover-color-rgb: 48, 86, 135;
+  --bs-code-color: #006261;
+  --bs-highlight-bg: #D4DED9;
+  --bs-border-color: #CFD2D5;
+  --bs-border-color-translucent: rgba(207, 210, 213, 0.75);
+  --bs-success: #448255;
+  --bs-info: #006261;
+  --bs-warning: #D5AA48;
+  --bs-danger: #B44D47;
+}
+
+[data-bs-theme="dark"] {
+  --bs-body-color: #CFD2D5;
+  --bs-body-color-rgb: 207, 210, 213;
+  --bs-body-bg: #0D1B2A;
+  --bs-body-bg-rgb: 13, 27, 42;
+  --bs-emphasis-color: #FFFFFF;
+  --bs-emphasis-color-rgb: 255, 255, 255;
+  --bs-secondary-color: #AEB1B5;
+  --bs-secondary-color-rgb: 174, 177, 181;
+  --bs-secondary-bg: #152A44;
+  --bs-secondary-bg-rgb: 21, 42, 68;
+  --bs-tertiary-bg: #28292C;
+  --bs-tertiary-bg-rgb: 40, 41, 44;
+  --bs-heading-color: #CFD2D5;
+  --bs-link-color: #84B8DD;
+  --bs-link-color-rgb: 132, 184, 221;
+  --bs-link-hover-color: #B1D8F2;
+  --bs-link-hover-color-rgb: 177, 216, 242;
+  --bs-code-color: #7EBEC0;
+  --bs-highlight-bg: #373A3D;
+  --bs-border-color: #28292C;
+  --bs-border-color-translucent: rgba(40, 41, 44, 0.85);
+}
+
+body {
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
+}
+
+/* pkgdown's syntax theme is deliberately remapped to EKIO tokens. */
+
+pre,
+pre code {
+  color: #191A1C;
+  background-color: #F2F3F5;
+}
+
+pre code span {
+  color: #191A1C;
+}
+
+pre code span.kw,
+pre code span.cf,
+pre code span.fu,
+pre code span.ot,
+pre code span.pp {
+  color: #1E3A5F;
+}
+
+pre code span.ch,
+pre code span.im,
+pre code span.in,
+pre code span.ss,
+pre code span.st,
+pre code span.vs {
+  color: #006261;
+}
+
+pre code span.an,
+pre code span.co,
+pre code span.cv,
+pre code span.do,
+pre code span.op,
+pre code span.wa {
+  color: #6E7378;
+}
+
+pre code span.al,
+pre code span.bn,
+pre code span.dv,
+pre code span.dt,
+pre code span.er,
+pre code span.fl {
+  color: #B44D47;
+}
+
+pre code span.at,
+pre code span.cn,
+pre code span.ex,
+pre code span.sc,
+pre code span.va {
+  color: #D3742A;
+}
+
+pre code span.re {
+  color: #448255;
+}
+
+mark,
+.mark {
+  color: #191A1C;
+  background: #D4DED9;
+  background-image: none;
+}
+
+.orcid {
+  color: #448255;
+}
+
+.lifecycle-stable {
+  background-color: #448255;
+  color: #FFFFFF;
+}
+
+.lifecycle-superseded {
+  background-color: #1E3A5F;
+  color: #FFFFFF;
+}
+
+.lifecycle-experimental,
+.lifecycle-deprecated {
+  background-color: #D3742A;
+  color: #191A1C;
+}
+
+.tabset-pills .tab-content {
+  border-color: #CFD2D5;
+}
+
+[data-bs-theme="dark"] pre,
+[data-bs-theme="dark"] pre code {
+  color: #CFD2D5;
+  background-color: #28292C;
+}
+
+[data-bs-theme="dark"] pre code span {
+  color: #CFD2D5;
+}
+
+[data-bs-theme="dark"] pre code span.kw,
+[data-bs-theme="dark"] pre code span.cf,
+[data-bs-theme="dark"] pre code span.fu,
+[data-bs-theme="dark"] pre code span.ot,
+[data-bs-theme="dark"] pre code span.pp {
+  color: #84B8DD;
+}
+
+[data-bs-theme="dark"] pre code span.ch,
+[data-bs-theme="dark"] pre code span.im,
+[data-bs-theme="dark"] pre code span.in,
+[data-bs-theme="dark"] pre code span.ss,
+[data-bs-theme="dark"] pre code span.st,
+[data-bs-theme="dark"] pre code span.vs {
+  color: #7EBEC0;
+}
+
+[data-bs-theme="dark"] pre code span.an,
+[data-bs-theme="dark"] pre code span.co,
+[data-bs-theme="dark"] pre code span.cv,
+[data-bs-theme="dark"] pre code span.do,
+[data-bs-theme="dark"] pre code span.op,
+[data-bs-theme="dark"] pre code span.wa {
+  color: #AEB1B5;
+}
+
+[data-bs-theme="dark"] pre code span.al,
+[data-bs-theme="dark"] pre code span.bn,
+[data-bs-theme="dark"] pre code span.dv,
+[data-bs-theme="dark"] pre code span.dt,
+[data-bs-theme="dark"] pre code span.er,
+[data-bs-theme="dark"] pre code span.fl {
+  color: #D76D63;
+}
+
+[data-bs-theme="dark"] pre code span.at,
+[data-bs-theme="dark"] pre code span.cn,
+[data-bs-theme="dark"] pre code span.ex,
+[data-bs-theme="dark"] pre code span.sc,
+[data-bs-theme="dark"] pre code span.va {
+  color: #D5AA48;
+}
+
+[data-bs-theme="dark"] pre code span.re {
+  color: #62A274;
+}
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+/* EKIO brand refinements on top of the bslib variables in _pkgdown.yml. */
+
+:root {
+  --ekio-navy: #152A44;
+  --ekio-accent: #1E3A5F;
+  --ekio-rule: #CFD2D5;
+  --ekio-muted: #6E7378;
+  --ekio-orange: #D3742A;
+  --ekio-surface: #FFFFFF;
+  --ekio-ink: #191A1C;
+}
+
+[data-bs-theme="dark"] {
+  --ekio-accent: #5597CC;
+  --ekio-rule: #28292C;
+  --ekio-muted: #AEB1B5;
+  --ekio-surface: #0D1B2A;
+  --ekio-ink: #CFD2D5;
+
+  --bs-link-color: #84B8DD;
+  --bs-link-hover-color: #B1D8F2;
+  --bs-primary: #5597CC;
+  --bs-primary-rgb: 85, 151, 204;
+  --bs-code-color: #7EBEC0;
+  --bs-border-color: #28292C;
+  --bs-secondary-color: #AEB1B5;
+}
+
+/* navbar ------------------------------------------------------------------ */
+
+/* The navigation remains navy in both color modes. */
+.navbar {
+  --bs-navbar-color: #CFD2D5;
+  --bs-navbar-hover-color: #FFFFFF;
+  --bs-navbar-active-color: #FFFFFF;
+  --bs-navbar-brand-color: #FFFFFF;
+  --bs-navbar-brand-hover-color: #FFFFFF;
+  --bs-navbar-disabled-color: #6E7378;
+  --bs-navbar-toggler-border-color: #6E7378;
+  --bs-emphasis-color: #FFFFFF;
+  --bs-emphasis-color-rgb: 255, 255, 255;
+  --bs-secondary-color: #AEB1B5;
+  color: #CFD2D5;
+}
+
+.navbar-brand {
+  font-family: "Host Grotesk", "Lato";
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.navbar .navbar-toggler-icon {
+  --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23CFD2D5' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.navbar .nav-item .nav-link:hover,
+.navbar .nav-item.active .nav-link {
+  background: #1E3A5F;
+}
+
+.navbar .form-control,
+.navbar input[type="search"] {
+  background-color: #1E3A5F;
+  border-color: #6E7378;
+  color: #FFFFFF;
+}
+
+.navbar .form-control::placeholder,
+.navbar input[type="search"]::placeholder {
+  color: #AEB1B5;
+}
+
+.navbar .form-control:focus,
+.navbar input[type="search"]:focus {
+  background-color: #1E3A5F;
+  border-color: #84B8DD;
+  box-shadow: none;
+  color: #FFFFFF;
+}
+
+/* type -------------------------------------------------------------------- */
+
+body {
+  font-family: "Lato";
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.page-header h1 {
+  font-family: "Lora";
+  letter-spacing: -0.01em;
+}
+
+pre,
+code,
+kbd,
+samp {
+  font-family: "Fira Code";
+}
+
+h2 {
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--ekio-rule);
+}
+
+.page-header {
+  border-bottom: 2px solid var(--ekio-accent);
+}
+
+/* content ----------------------------------------------------------------- */
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #D5AA48;
+  outline-offset: 2px;
+}
+
+::selection {
+  background: #D4DED9;
+  color: #191A1C;
+}
+
+pre {
+  background-color: #F2F3F5;
+  color: #191A1C;
+}
+
+[data-bs-theme="dark"] pre {
+  background-color: #28292C;
+  color: #CFD2D5;
+}
+
+blockquote {
+  padding-left: 1rem;
+  border-left: 3px solid var(--ekio-orange);
+  color: var(--ekio-muted);
+}
+
+table {
+  --bs-table-border-color: var(--ekio-rule);
+}
+
+table thead th {
+  border-bottom: 2px solid var(--ekio-accent);
+}
+
+footer {
+  border-top: 1px solid var(--ekio-rule);
+}
+
+.contents img {
+  border-radius: 2px;
+}
+
+[data-bs-theme="dark"] main img:not(.logo):not([src^="http"]) {
+  background-color: var(--ekio-surface);
+  padding: 0.5rem;
+  border-radius: 3px;
+  opacity: 0.85;
+  transition: opacity 250ms ease-in-out;
+}
+
+[data-bs-theme="dark"] main img:not(.logo):not([src^="http"]):hover,
+[data-bs-theme="dark"] main img:not(.logo):not([src^="http"]):focus {
+  opacity: 1;
+}
+
+/* reference index --------------------------------------------------------- */
+
+.template-reference-index .section h2 {
+  color: var(--ekio-accent);
+}
