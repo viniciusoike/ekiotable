@@ -3,6 +3,9 @@
 
 # ekiotable
 
+[![r-universe
+badge](https://viniciusoike.r-universe.dev/badges/ekiotable)](https://viniciusoike.r-universe.dev/ekiotable)
+
 ekiotable applies the EKIO visual identity to
 [gt](https://gt.rstudio.com) tables, with the Lora and Lato type pairing
 used across EKIO charts and reports.
