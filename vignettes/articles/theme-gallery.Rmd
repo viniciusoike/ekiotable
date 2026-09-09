@@ -1,6 +1,10 @@
 ---
 title: "Table theme gallery"
 output: html_document
+vignette: >
+  %\VignetteIndexEntry{Table theme gallery}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
