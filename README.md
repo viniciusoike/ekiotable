@@ -3,8 +3,12 @@
 
 # ekiotable
 
+<!-- badges: start -->
+
 [![r-universe
 badge](https://viniciusoike.r-universe.dev/badges/ekiotable)](https://viniciusoike.r-universe.dev/ekiotable)
+[![R-CMD-check](https://github.com/viniciusoike/ekiotable/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/viniciusoike/ekiotable/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
 
 ekiotable applies the EKIO visual identity to
 [gt](https://gt.rstudio.com) tables, with the Lora and Lato type pairing
@@ -37,3 +41,9 @@ ekiotable ships two themes for gt tables:
 - `gt_theme_hokusai()` — a minimal blue-and-paper theme with four
   palettes (`mountain`, `wind`, `blossom`, `lake`), optional gridlines,
   and no footer.
+
+## See more
+
+See the [theme
+gallery](https://viniciusoike.github.io/ekiotable/articles/theme-gallery.html)
+and the package website at <https://viniciusoike.github.io/ekiotable/>.

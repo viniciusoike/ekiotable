@@ -1,5 +1,10 @@
 # ekiotable (development version)
 
+* Added GitHub Actions workflows for `R CMD check` and pkgdown. The checks run
+  on macOS, Windows, and Linux across R release, devel, and the four previous
+  releases. pkgdown builds the package site and deploys it to GitHub Pages on
+  every push to `master` and on release.
+
 * `gt_theme_ekio()` now draws the table, heading, source notes, and footnotes
   on the warm offwhite surface `#FBFBF6`, matching the `ekioplot::theme_ekio()`
   default. A chart and a table in one document no longer disagree about the
