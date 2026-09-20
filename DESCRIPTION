@@ -1,7 +1,7 @@
 Package: ekiotable
 Type: Package
 Title: EKIO Visual Identity System for Tables
-Version: 0.1.0.9000
+Version: 0.1.0
 Authors@R:
     person(
       "Vinicius", "Oike",
@@ -21,7 +21,7 @@ Encoding: UTF-8
 RoxygenNote: 7.3.3
 Imports:
     cli,
-    ekioplot (>= 1.1.2),
+    ekioplot (>= 1.1.0),
     gt,
     tidyselect
 Suggests:

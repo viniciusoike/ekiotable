@@ -18,8 +18,8 @@
 #'     `Alpha` (1 to 11), `Gen Z` (12 to 27), `Millennial` (28 to 43),
 #'     `Gen X` (44 to 59), `Boomers` (60 to 79), `Elder` (80 or more).}
 #' }
-#' @source IBGE, Censo Demográfico 2022, SIDRA table 9514,
-#'   <https://sidra.ibge.gov.br/tabela/9514>. Rows keep the total declared age
+#' @source IBGE, Censo Demográfico 2022, SIDRA table 9514
+#'   (sidra.ibge.gov.br/tabela/9514). Rows keep the total declared age
 #'   (`Forma de declaração da idade = "Total"`) and single-year ages.
 #' @examples
 #' generations_brazil

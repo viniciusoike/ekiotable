@@ -20,8 +20,8 @@ source table has no age 0.}
 }
 }
 \source{
-IBGE, Censo Demográfico 2022, SIDRA table 9514,
-\url{https://sidra.ibge.gov.br/tabela/9514}. Rows keep the total declared age
+IBGE, Censo Demográfico 2022, SIDRA table 9514
+(sidra.ibge.gov.br/tabela/9514). Rows keep the total declared age
 (\verb{Forma de declaração da idade = "Total"}) and single-year ages.
 }
 \usage{
