@@ -1,0 +1,51 @@
+# Build the pkgdown site and deploy it to GitHub Pages.
+name: pkgdown
+
+on:
+  push:
+    branches: [main, master]
+  release:
+    types: [published]
+  workflow_dispatch:
+
+# Allow pushing the built site to the gh-pages branch.
+permissions:
+  contents: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pkgdown:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::pkgdown
+          needs: website
+
+      # Install the local package so the pkgdown reference reflects this branch.
+      - name: Install ekiotable (local source)
+        run: R CMD INSTALL --no-build-vignettes .
+
+      - name: Build pkgdown site
+        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
+        shell: Rscript {0}
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          clean: true
+          branch: gh-pages
+          folder: docs
