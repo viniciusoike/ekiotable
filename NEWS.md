@@ -1,3 +1,25 @@
+# ekiotable (development version)
+
+* `gt_theme_ekio()` now draws the table, heading, source notes, and footnotes
+  on the warm offwhite surface `#FBFBF6`, matching the `ekioplot::theme_ekio()`
+  default. A chart and a table in one document no longer disagree about the
+  background.
+
+* Added the `background` argument to `gt_theme_ekio()`, which takes the same
+  surfaces as `ekioplot::theme_ekio()`: `"offwhite"`, `"white"`, `"cold"`,
+  `"transparent"`, or a hex code.
+
+* Replaced the two identity-palette colors in `gt_theme_ekio()` with rungs of
+  the generated blue scale. Rules and row group headings moved from Baltic Blue
+  to `blue.600`, and the summary row band moved from Soft Linen 2 to
+  `blue.100`. The theme now sources every color from the scales, and
+  `ekio_brand` is reserved for identity work.
+
+* Refreshed the pinned surface tokens against ekioplot 1.1.2: `offwhite` is
+  `#FBFBF6` rather than the near-white `#FEFEFE`, and `cold` (`#F6F7F8`) was
+  added. `ekio_brand` is no longer copied into the package and resolves through
+  `ekioplot::ekio_pal()` instead.
+
 # ekiotable 0.1.0
 
 * Color tokens now resolve by name, including named shades and local basic and brand colors, with informative errors for unknown colors.

@@ -38,3 +38,20 @@
       Error in `gt_theme_ekio()`:
       ! `font_title` must be a single non-empty family name.
 
+# gt_theme_ekio() rejects an unknown surface
+
+    Code
+      gt_theme_ekio(small_tbl(), background = "beige")
+    Condition
+      Error in `gt_theme_ekio()`:
+      ! `background` must be one of "offwhite", "white", "cold", and "transparent", or a hex code.
+      x Got "beige".
+
+---
+
+    Code
+      gt_theme_ekio(small_tbl(), background = c("white", "cold"))
+    Condition
+      Error in `gt_theme_ekio()`:
+      ! `background` must be a single string.
+

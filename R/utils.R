@@ -1,4 +1,4 @@
-# Token and font resolution -------------------------------------------------
+# Token resolution ----------------------------------------------------------
 
 .ekio <- function(group, n) {
   if (!is.character(group) || length(group) != 1L || is.na(group)) {
@@ -23,6 +23,50 @@
   }
   return(unname(hex))
 }
+
+# Surface resolution --------------------------------------------------------
+
+# Same vocabulary as theme_ekio(background =): three named surfaces on one
+# warm-to-cold axis, the transparent sentinel, and a hex escape hatch.
+# ekioplot keeps its resolver internal, so the names are repeated here.
+.gt_surfaces <- c("offwhite", "white", "cold", "transparent")
+
+.resolve_surface <- function(background, call = parent.frame()) {
+  if (
+    !is.character(background) ||
+      length(background) != 1L ||
+      is.na(background)
+  ) {
+    cli::cli_abort(
+      "{.arg background} must be a single string.",
+      call = call
+    )
+  }
+
+  if (grepl("^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$", background)) {
+    return(background)
+  }
+
+  surface <- switch(
+    background,
+    offwhite = .ekio("basic", "offwhite"),
+    white = .ekio("basic", "white"),
+    cold = .ekio("basic", "cold"),
+    # gt emits this as rgba(255, 255, 255, 0), so the page shows through.
+    transparent = "transparent",
+    cli::cli_abort(
+      c(
+        "{.arg background} must be one of {.val {(.gt_surfaces)}}, or a hex
+         code.",
+        "x" = "Got {.val {background}}."
+      ),
+      call = call
+    )
+  )
+  return(surface)
+}
+
+# Font resolution -----------------------------------------------------------
 
 .ekio_font_stacks <- c(
   lora = "Lora",

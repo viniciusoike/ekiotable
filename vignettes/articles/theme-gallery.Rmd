@@ -140,8 +140,10 @@ complete_table <- pizza_data |>
 ## EKIO
 
 `gt_theme_ekio()` uses filled blue column headers and spanners, unfilled group
-headings with Baltic Blue rules, and a dark grand total. It does not add a
-footer.
+headings with blue rules, and a dark grand total. The table sits on the warm
+offwhite surface `ekioplot::theme_ekio()` draws on, so a chart and a table in
+one document share a background. Pass `background = "white"`, `"cold"`, or
+`"transparent"` to change it. It does not add a footer.
 
 ::: {data-bs-theme="light"}
 

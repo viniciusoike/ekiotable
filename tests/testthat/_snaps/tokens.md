@@ -14,7 +14,7 @@
     Condition
       Error in `.ekio()`:
       ! Unknown color "beige" in "basic".
-      i Available: "white", "offwhite", "pivot", and "black"
+      i Available: "white", "offwhite", "cold", "pivot", and "black"
 
 ---
 
@@ -23,13 +23,13 @@
     Condition
       Error in `ekioplot::ekio_pal()`:
       ! Palette "chartreuse" not found.
-      i Available: "gold", "accent_blue", "accent_orange", "ekio_brand", "full", "full_muted", "cool3", "cool4", "blue", "gray", "stone", "teal", "green", "orange", "red", "blue_orange", "blue_red", "teal_orange", ..., "inferno", and "plasma"
+      i Available: "gold", "accent_blue", "accent_orange", "ekio_brand", "full", "full_muted", "cool3", "cool4", "blue", "gray", "stone", "teal", "green", "orange", "red", "purple", "purple_orange", "blue_red", ..., "inferno", and "plasma"
 
 # the local basic tokens are pinned
 
     Code
       print(.ekio_local[["basic"]])
     Output
-          white  offwhite     pivot     black 
-      "#FFFFFF" "#FEFEFE" "#F5F3EF" "#000000" 
+          white  offwhite      cold     pivot     black 
+      "#FFFFFF" "#FBFBF6" "#F6F7F8" "#F5F3EF" "#000000" 
 

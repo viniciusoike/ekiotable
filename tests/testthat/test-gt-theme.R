@@ -39,8 +39,8 @@ test_that("gt_theme_ekio() uses ekioplot palettes", {
     unname(ekioplot::ekio_pal("gray")["900"])
   )
   expect_equal(
-    is.na(gt_option(out, "source_notes_background_color")),
-    TRUE
+    gt_option(out, "source_notes_background_color"),
+    .ekio("basic", "offwhite")
   )
 })
 
@@ -60,12 +60,12 @@ test_that("the three body levels get distinct styles", {
   expect_equal(all(c("row_groups", "stub") %in% locnames), TRUE)
   expect_equal(
     gt_option(out, "row_group_border_top_color"),
-    .ekio("ekio_brand", "Baltic Blue")
+    .ekio("blue", 600)
   )
   expect_equal(gt_option(out, "row_group_border_bottom_style"), "none")
   expect_equal(
     gt_styles_at(out, "row_groups")[[1]]$cell_text$color,
-    .ekio("ekio_brand", "Baltic Blue")
+    .ekio("blue", 600)
   )
   expect_equal(
     gt_styles_at(out, "stub")[[1]]$cell_text$color,
@@ -89,7 +89,7 @@ test_that("summary rows are tinted and their stub labels match", {
 
   expect_equal(
     gt_option(out, "summary_row_background_color"),
-    .ekio("ekio_brand", "Soft Linen 2")
+    .ekio("blue", 100)
   )
   # gt files the value cell and its stub label under one locname; the stub
   # label is the entry with no column.
@@ -188,7 +188,7 @@ test_that("the numeric font inherits the body font and respects overrides", {
   expect_equal(tail(gt_styles_at(out, "data"), 1)[[1]]$cell_text$font, "Lato")
 })
 
-test_that("the body neutrals are warm, matching the note bands", {
+test_that("the body neutrals are warm, matching the default surface", {
   local_font_options()
   out <- gt_theme_ekio(small_tbl())
 
@@ -199,5 +199,70 @@ test_that("the body neutrals are warm, matching the note bands", {
   expect_equal(
     gt_option(out, "column_labels_border_bottom_color"),
     .ekio("stone", 300)
+  )
+})
+
+test_that("the default surface is the warm offwhite theme_ekio() uses", {
+  local_font_options()
+  out <- gt_theme_ekio(small_tbl())
+  offwhite <- .ekio("basic", "offwhite")
+
+  expect_equal(gt_option(out, "table_background_color"), offwhite)
+  expect_equal(gt_option(out, "heading_background_color"), offwhite)
+  expect_equal(gt_option(out, "footnotes_background_color"), offwhite)
+})
+
+test_that("gt_theme_ekio() takes every named theme_ekio() surface", {
+  local_font_options()
+  surfaces <- c(
+    offwhite = .ekio("basic", "offwhite"),
+    white = .ekio("basic", "white"),
+    cold = .ekio("basic", "cold")
+  )
+
+  for (name in names(surfaces)) {
+    out <- gt_theme_ekio(small_tbl(), background = name)
+    expect_equal(gt_option(out, "table_background_color"), surfaces[[name]])
+    expect_equal(gt_option(out, "heading_background_color"), surfaces[[name]])
+  }
+})
+
+test_that("gt_theme_ekio() takes a hex surface and a transparent one", {
+  local_font_options()
+
+  out <- gt_theme_ekio(small_tbl(), background = "#EEE8D5")
+  expect_equal(gt_option(out, "table_background_color"), "#EEE8D5")
+
+  # gt renders this as rgba(255, 255, 255, 0), so the page shows through.
+  out <- gt_theme_ekio(small_tbl(), background = "transparent")
+  expect_equal(gt_option(out, "table_background_color"), "transparent")
+  html <- as.character(gt::as_raw_html(out))
+  expect_equal(grepl("rgba(255, 255, 255, 0)", html, fixed = TRUE), TRUE)
+})
+
+test_that("gt_theme_ekio() rejects an unknown surface", {
+  local_font_options()
+  expect_snapshot(
+    gt_theme_ekio(small_tbl(), background = "beige"),
+    error = TRUE
+  )
+  expect_snapshot(
+    gt_theme_ekio(small_tbl(), background = c("white", "cold")),
+    error = TRUE
+  )
+})
+
+test_that("the structural blues stay on one scale", {
+  local_font_options()
+  out <- gt_theme_ekio(grouped_tbl())
+
+  # Four rungs, four jobs, no identity-palette color among them.
+  expect_equal(
+    gt_option(out, "table_border_top_color"),
+    .ekio("blue", 600)
+  )
+  expect_equal(
+    gt_styles_at(out, "title")[[1]]$cell_text$color,
+    .ekio("blue", 900)
   )
 })
