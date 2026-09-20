@@ -5,14 +5,28 @@ test_that(".ekio() resolves numeric shades from ekioplot scales", {
 
 test_that(".ekio() resolves the local basic tokens", {
   expect_equal(.ekio("basic", "white"), "#FFFFFF")
-  expect_equal(.ekio("basic", "offwhite"), "#FEFEFE")
+  expect_equal(.ekio("basic", "offwhite"), "#FBFBF6")
+  expect_equal(.ekio("basic", "cold"), "#F6F7F8")
   expect_equal(.ekio("basic", "pivot"), "#F5F3EF")
   expect_equal(.ekio("basic", "black"), "#000000")
 })
 
-test_that(".ekio() resolves the local brand tokens", {
-  expect_equal(.ekio("ekio_brand", "Baltic Blue"), "#225A7E")
-  expect_equal(.ekio("ekio_brand", "Soft Linen"), "#EFE8DC")
+test_that(".ekio() resolves brand tokens from ekioplot", {
+  skip_if_not_installed("ekioplot")
+  upstream <- ekioplot::ekio_pal("ekio_brand")
+
+  expect_equal(
+    .ekio("ekio_brand", "Baltic Blue"),
+    unname(upstream["Baltic Blue"])
+  )
+  expect_equal(
+    .ekio("ekio_brand", "Soft Linen"),
+    unname(upstream["Soft Linen"])
+  )
+})
+
+test_that("basic is the only group the package pins", {
+  expect_equal(names(.ekio_local), "basic")
 })
 
 test_that(".ekio() resolves named tokens from ekioplot, not only shades", {
@@ -36,14 +50,21 @@ test_that(".ekio() rejects an unknown shade or group", {
   expect_snapshot(.ekio("chartreuse", 500), error = TRUE)
 })
 
-
-test_that("the local brand tokens match ekioplot", {
-  skip_if_not_installed("ekioplot")
-  upstream <- ekioplot::ekio_pal("ekio_brand")
-  local <- .ekio_local[["ekio_brand"]]
-  expect_equal(local[names(upstream)], unclass(upstream)[names(upstream)])
-})
-
 test_that("the local basic tokens are pinned", {
   expect_snapshot(print(.ekio_local[["basic"]]))
+})
+
+test_that("the pinned surfaces match the ekioplot theme surfaces", {
+  skip_if_not_installed("ekioplot")
+  # ekio_pal() does not expose `basic`, so the copy cannot be checked against
+  # a palette. theme_ekio() writes the surface into the panel fill, which is
+  # the one place upstream exposes it.
+  surface_fill <- function(background) {
+    theme <- ekioplot::theme_ekio(background = background)
+    return(toupper(theme$panel.background$fill))
+  }
+
+  for (surface in c("offwhite", "white", "cold")) {
+    expect_equal(.ekio("basic", surface), surface_fill(surface))
+  }
 })

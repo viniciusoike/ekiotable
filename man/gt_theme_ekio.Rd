@@ -12,7 +12,8 @@ gt_theme_ekio(
   font_title = NULL,
   font_body = NULL,
   font_numeric = NULL,
-  font_labels = NULL
+  font_labels = NULL,
+  background = "offwhite"
 )
 }
 \arguments{
@@ -31,14 +32,22 @@ then use \code{ekioplot.font_title} and \code{ekioplot.font_text}, respectively,
 falling back to Lora and Lato. Numeric and label fonts inherit the resolved
 body font unless explicitly set or configured through their role option.
 Fonts must be available to the renderer; this function does not install them.}
+
+\item{background}{Character. Table surface, using the same vocabulary as
+\code{\link[ekioplot:theme_ekio]{ekioplot::theme_ekio()}}: \code{"offwhite"} (default, \verb{#FBFBF6}, a warm white),
+\code{"white"}, \code{"cold"} (\verb{#F6F7F8}, a cool white), or \code{"transparent"} to let
+the page show through. A hex code is also accepted, though only the named
+surfaces are checked for contrast against the brand scales.}
 }
 \value{
 A styled gt table object.
 }
 \description{
-EKIO styling for gt table objects. It uses a blue column-label band, Baltic
-Blue rules above unfilled group headings, and tabular figures for body
-numerals. No footer is added.
+EKIO styling for gt table objects. It uses a blue column-label band, blue
+rules above unfilled group headings, and tabular figures for body numerals.
+The table sits on the same warm offwhite surface as \code{\link[ekioplot:theme_ekio]{ekioplot::theme_ekio()}},
+so a chart and a table in one document share a background. No footer is
+added.
 }
 \examples{
 library(gt)

@@ -2,9 +2,11 @@
 
 #' Apply the EKIO Theme to GT Tables
 #'
-#' EKIO styling for gt table objects. It uses a blue column-label band, Baltic
-#' Blue rules above unfilled group headings, and tabular figures for body
-#' numerals. No footer is added.
+#' EKIO styling for gt table objects. It uses a blue column-label band, blue
+#' rules above unfilled group headings, and tabular figures for body numerals.
+#' The table sits on the same warm offwhite surface as [ekioplot::theme_ekio()],
+#' so a chart and a table in one document share a background. No footer is
+#' added.
 #'
 #' @param data A gt table object.
 #' @param table_width Character. Width of the table (default: `"100%"`).
@@ -17,6 +19,11 @@
 #'   falling back to Lora and Lato. Numeric and label fonts inherit the resolved
 #'   body font unless explicitly set or configured through their role option.
 #'   Fonts must be available to the renderer; this function does not install them.
+#' @param background Character. Table surface, using the same vocabulary as
+#'   [ekioplot::theme_ekio()]: `"offwhite"` (default, `#FBFBF6`, a warm white),
+#'   `"white"`, `"cold"` (`#F6F7F8`, a cool white), or `"transparent"` to let
+#'   the page show through. A hex code is also accepted, though only the named
+#'   surfaces are checked for contrast against the brand scales.
 #'
 #' @return A styled gt table object.
 #' @export
@@ -27,9 +34,11 @@
 #'   gt() |>
 #'   gt_theme_ekio()
 
-# Two blues carry two jobs. Baltic Blue is the editorial voice: title and
-# row group headings. Blue 700 is structure: the column label slab and the
-# emphasis on summary values.
+# Four rungs of one blue carry four jobs, light to dark: 600 is the editorial
+# voice, ruling off the heading and the row groups; 700 is structure, the
+# column label slab and the emphasis on summary values; 800 is the grand
+# summary slab; 900 is the title. Sourcing all four from the generated scale
+# keeps the identity palette for identity work.
 gt_theme_ekio <- function(
   data,
   table_width = "100%",
@@ -38,13 +47,15 @@ gt_theme_ekio <- function(
   font_title = NULL,
   font_body = NULL,
   font_numeric = NULL,
-  font_labels = NULL
+  font_labels = NULL,
+  background = "offwhite"
 ) {
   if (!inherits(data, "gt_tbl")) {
     cli::cli_abort("{.arg data} must be a gt table object")
   }
 
   .validate_gt_theme_args(table_width, font_size, stripe)
+  surface <- .resolve_surface(background)
   font_title <- .ekio_font("title", font_title)
   font_body <- .ekio_font("body", font_body)
   font_numeric <- .ekio_font("numeric", font_numeric, fallback = font_body)
@@ -52,16 +63,21 @@ gt_theme_ekio <- function(
 
   colors <- list(
     title = .ekio("blue", 900),
-    editorial = .ekio("ekio_brand", "Baltic Blue"),
+    editorial = .ekio("blue", 600),
     structure = .ekio("blue", 700),
     structure_dark = .ekio("blue", 800),
-    structure_light = .ekio("ekio_brand", "Soft Linen 2"),
+    # The lightest rung of the same scale. It clears the surface and the
+    # stripe by roughly dE2000 8, where the warm cream it replaced cleared
+    # both by 4.
+    structure_light = .ekio("blue", 100),
     text = .ekio("gray", 900),
     text_mid = .ekio("gray", 700),
     text_light = .ekio("gray", 600),
     border = .ekio("stone", 300),
-    stripe_bg = .ekio("stone", 100),
-    note_bg = .ekio("ekio_brand", "Soft Linen 2")
+    # One stripe for every surface. The warm stone reads slightly warm on the
+    # cold surface, but the cool alternative, gray 100, lands within dE2000 1
+    # of it and the striping disappears.
+    stripe_bg = .ekio("stone", 100)
   )
 
   styled_table <- data |>
@@ -70,8 +86,9 @@ gt_theme_ekio <- function(
       table.width = table_width,
       table.font.size = gt::px(font_size),
       table.font.color = colors$text,
+      table.background.color = surface,
 
-      heading.background.color = .ekio("basic", "white"),
+      heading.background.color = surface,
       heading.title.font.size = gt::px(font_size + 6),
       heading.title.font.weight = "600",
       heading.subtitle.font.size = gt::px(font_size),
@@ -125,11 +142,11 @@ gt_theme_ekio <- function(
       source_notes.font.size = gt::px(font_size - 3),
       source_notes.border.lr.style = "none",
       source_notes.padding = gt::px(10),
-      # source_notes.background.color = colors$note_bg,
+      source_notes.background.color = surface,
 
       footnotes.font.size = gt::px(font_size - 3),
-      footnotes.padding = gt::px(8)
-      # footnotes.background.color = colors$note_bg
+      footnotes.padding = gt::px(8),
+      footnotes.background.color = surface
     ) |>
     gt::tab_style(
       style = list(
