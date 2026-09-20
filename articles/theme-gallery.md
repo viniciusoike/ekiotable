@@ -1,0 +1,245 @@
+# Table theme gallery
+
+Compare the themes on two reusable tables: a compact example with four
+rows and two spanners, and a complete example with row groups,
+subtotals, a grand total, footnotes, and a source note. The examples
+adapt the cars and pizza sales prototypes and use datasets bundled with
+**gt**.
+
+Build the table first, including summaries and notes, then apply the
+theme. All Hokusai examples use `stripe = TRUE` and `gridlines = FALSE`:
+only the palette changes. The shared neutral stripes stay the same; look
+at the title, section rules, group headings, and summary fills to
+compare colors.
+
+## Build the examples
+
+``` r
+
+library(ekiotable)
+library(gt)
+```
+
+### Compact table
+
+Four cars, a simple title, row labels, and spanners for performance and
+fuel economy keep the structure small enough to compare at a glance.
+
+``` r
+
+cars_data <- gtcars[order(gtcars$msrp, decreasing = TRUE), ]
+cars_data <- cars_data[
+  seq_len(4),
+  c("model", "hp", "trq", "mpg_c", "mpg_h")
+]
+
+simple_table <- cars_data |>
+  gt(rowname_col = "model") |>
+  tab_header(title = "High-performance cars") |>
+  tab_stubhead(label = "Model") |>
+  tab_spanner(label = "Performance", columns = c(hp, trq)) |>
+  tab_spanner(label = "Fuel economy (mpg)", columns = c(mpg_c, mpg_h)) |>
+  cols_label(
+    hp = "HP",
+    trq = "Torque (lb-ft)",
+    mpg_c = "City",
+    mpg_h = "Highway"
+  ) |>
+  fmt_integer(columns = c(hp, trq, mpg_c, mpg_h))
+```
+
+### Complete table
+
+Aggregate pizza sales by category and size. Each dataset row represents
+one pizza sold, so the count below measures pizzas rather than distinct
+orders. All sizes are retained, including XL and XXL, so the grand total
+covers the entire dataset.
+
+``` r
+
+pizza_source <- data.frame(
+  category = gt::pizzaplace$type,
+  size = gt::pizzaplace$size,
+  pizzas = 1L,
+  revenue = gt::pizzaplace$price
+)
+pizza_data <- aggregate(
+  cbind(pizzas, revenue) ~ category + size,
+  data = pizza_source,
+  FUN = sum
+)
+pizza_data$average_price <- pizza_data$revenue / pizza_data$pizzas
+pizza_data$size <- factor(
+  pizza_data$size,
+  levels = c("S", "M", "L", "XL", "XXL")
+)
+pizza_data <- pizza_data[order(pizza_data$category, pizza_data$size), ]
+```
+
+The category column defines row groups (`groupname_col`), and size
+supplies the stub labels (`rowname_col`). Only additive quantities
+receive totals; average prices are left blank in summary rows.
+
+``` r
+
+complete_table <- pizza_data |>
+  gt(rowname_col = "size", groupname_col = "category") |>
+  tab_header(
+    title = "Pizza sales by category and size",
+    subtitle = "Full-year sales, 2015"
+  ) |>
+  tab_stubhead(label = "Category / size") |>
+  tab_spanner(label = "Sales", columns = c(pizzas, revenue)) |>
+  cols_label(
+    pizzas = "Pizzas sold",
+    revenue = "Revenue",
+    average_price = "Average price"
+  ) |>
+  fmt_integer(columns = pizzas) |>
+  fmt_currency(columns = c(revenue, average_price), currency = "USD") |>
+  summary_rows(
+    groups = everything(),
+    columns = pizzas,
+    fns = list(Total = ~ sum(.)),
+    fmt = ~ fmt_integer(.)
+  ) |>
+  summary_rows(
+    groups = everything(),
+    columns = revenue,
+    fns = list(Total = ~ sum(.)),
+    fmt = ~ fmt_currency(., currency = "USD")
+  ) |>
+  grand_summary_rows(
+    columns = pizzas,
+    fns = list("Grand total" = ~ sum(.)),
+    fmt = ~ fmt_integer(.)
+  ) |>
+  grand_summary_rows(
+    columns = revenue,
+    fns = list("Grand total" = ~ sum(.)),
+    fmt = ~ fmt_currency(., currency = "USD")
+  ) |>
+  tab_footnote(
+    footnote = "Counts pizzas sold, not distinct orders; an order can contain several pizzas.",
+    locations = cells_column_labels(columns = pizzas)
+  ) |>
+  tab_footnote(
+    footnote = "Revenue divided by pizzas sold within each category and size.",
+    locations = cells_column_labels(columns = average_price)
+  ) |>
+  tab_source_note(
+    source_note = md("Source: **gt::pizzaplace**, pizza sales in 2015.")
+  )
+```
+
+## EKIO
+
+[`gt_theme_ekio()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_ekio.md)
+uses filled blue column headers and spanners, unfilled group headings
+with blue rules, and a dark grand total. The table sits on the warm
+offwhite surface
+[`ekioplot::theme_ekio()`](https://viniciusoike.github.io/ekioplot/reference/theme_ekio.html)
+draws on, so a chart and a table in one document share a background.
+Pass `background = "white"`, `"cold"`, or `"transparent"` to change it.
+It does not add a footer.
+
+``` r
+
+simple_table |> gt_theme_ekio(stripe = TRUE)
+```
+
+[TABLE]
+
+``` r
+
+complete_table |> gt_theme_ekio(stripe = TRUE)
+```
+
+[TABLE]
+
+## Hokusai palettes
+
+Hokusai uses white headers, fine rules, and pale summary backgrounds.
+Typography, striping, and gridlines are held constant across the four
+palettes. These are theme colors, not a scale encoding the values in the
+table.
+
+### Mountain
+
+Deep blue titles and accents with a nearly white, warm summary tint.
+
+``` r
+
+simple_table |>
+  gt_theme_hokusai(palette = "mountain", stripe = TRUE, gridlines = FALSE)
+```
+
+[TABLE]
+
+``` r
+
+complete_table |>
+  gt_theme_hokusai(palette = "mountain", stripe = TRUE, gridlines = FALSE)
+```
+
+[TABLE]
+
+### Wind
+
+Muted slate-blue titles and accents with a warm gray summary tint.
+
+``` r
+
+simple_table |>
+  gt_theme_hokusai(palette = "wind", stripe = TRUE, gridlines = FALSE)
+```
+
+[TABLE]
+
+``` r
+
+complete_table |>
+  gt_theme_hokusai(palette = "wind", stripe = TRUE, gridlines = FALSE)
+```
+
+[TABLE]
+
+### Blossom
+
+Dark blue titles, a separate blue accent, and a pale beige summary tint.
+
+``` r
+
+simple_table |>
+  gt_theme_hokusai(palette = "blossom", stripe = TRUE, gridlines = FALSE)
+```
+
+[TABLE]
+
+``` r
+
+complete_table |>
+  gt_theme_hokusai(palette = "blossom", stripe = TRUE, gridlines = FALSE)
+```
+
+[TABLE]
+
+### Lake
+
+Slate-blue titles, a lighter blue accent, and a pale cream summary tint.
+
+``` r
+
+simple_table |>
+  gt_theme_hokusai(palette = "lake", stripe = TRUE, gridlines = FALSE)
+```
+
+[TABLE]
+
+``` r
+
+complete_table |>
+  gt_theme_hokusai(palette = "lake", stripe = TRUE, gridlines = FALSE)
+```
+
+[TABLE]

@@ -1,0 +1,67 @@
+# ekiotable
+
+ekiotable applies the EKIO visual identity to
+[gt](https://gt.rstudio.com) tables, with the Lora and Lato type pairing
+used across EKIO charts and reports.
+
+## Installation
+
+ekiotable and its only non-CRAN dependency,
+[ekioplot](https://github.com/viniciusoike/ekioplot), ship from the
+[viniciusoike r-universe](https://viniciusoike.r-universe.dev). Neither
+package is on CRAN. The command below installs both;
+[`install.packages()`](https://rdrr.io/r/utils/install.packages.html)
+resolves `ekioplot` from the same universe automatically.
+
+``` r
+
+install.packages(
+  "ekiotable",
+  repos = c("https://viniciusoike.r-universe.dev", "https://cloud.r-project.org")
+)
+```
+
+## Themes
+
+ekiotable ships two themes for gt tables:
+
+- [`gt_theme_ekio()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_ekio.md)
+  — the default EKIO theme: filled blue column labels, unfilled group
+  headings with blue rules, tabular numerals, and the same warm offwhite
+  surface as
+  [`ekioplot::theme_ekio()`](https://viniciusoike.github.io/ekioplot/reference/theme_ekio.html).
+  No footer is added.
+- [`gt_theme_hokusai()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_hokusai.md)
+  — a minimal blue-and-paper theme with four palettes (`mountain`,
+  `wind`, `blossom`, `lake`), optional gridlines, and no footer.
+
+## See more
+
+See the [theme
+gallery](https://viniciusoike.github.io/ekiotable/articles/theme-gallery.html)
+and the package website at <https://viniciusoike.github.io/ekiotable/>.
+
+# Package index
+
+## Table Themes
+
+Apply EKIO visual identity to gt tables
+
+- [`gt_theme_ekio()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_ekio.md)
+  : Apply the EKIO Theme to GT Tables
+- [`gt_theme_hokusai()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_hokusai.md)
+  : Apply a Minimal Hokusai Theme to GT Tables
+
+## Datasets
+
+Example data included with ekiotable
+
+- [`generations_brazil`](https://viniciusoike.github.io/ekiotable/reference/generations_brazil.md)
+  : Brazilian resident population by age and sex, 2022 Census
+
+# Articles
+
+### Table styling
+
+- [Table theme
+  gallery](https://viniciusoike.github.io/ekiotable/articles/theme-gallery.md):
