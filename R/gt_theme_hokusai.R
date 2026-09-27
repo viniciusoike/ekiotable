@@ -2,9 +2,12 @@
 
 #' Apply a Minimal Hokusai Theme to GT Tables
 #'
-#' Blue typography and fine horizontal rules inspired by four supplied Hokusai
-#' reproductions. White backgrounds and pale paper tints keep analytical tables
-#' clean; color does not encode data values. No footer is added.
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' Blue typography and fine horizontal rules inspired by Hokusai prints.
+#' White backgrounds and pale paper tints keep analytical tables clean;
+#' color does not encode data values. No footer is added.
 #'
 #' @inheritParams gt_theme_ekio
 #' @param font_size Numeric. Body font size in pixels (default: 12). Column
@@ -21,13 +24,11 @@
 #' @param reversed Logical. Fill column labels and spanners with the palette blue
 #'   and use the palette paper color for their text and rules (default: FALSE).
 #' @details
-#' The palettes are stored as explicit hex values in `R/utils.R`. Mountain uses
-#' the supplied mountain landscape, wind the windy field, blossom the bullfinch
-#' and weeping cherry, and lake the lakeside landscape. Blues and paper colors
-#' are extracted from the digital reproductions; summary fills are lightened
-#' paper tones on a neutral white canvas. All palettes include a shared neutral
-#' gray scale (`gray_50` to `gray_900`). Zebra stripes use `gray_100`, gridlines
-#' use `gray_200`, and structural dividers use `gray_300`.
+#' Four palette variants (`"mountain"`, `"wind"`, `"blossom"`, `"lake"`) pair
+#' blues with paper tones. Summary fills are lightened paper tones on a
+#' neutral white canvas. All palettes include a shared neutral gray scale
+#' (`gray_50` to `gray_900`). Zebra stripes use `gray_100`, gridlines use
+#' `gray_200`, and structural dividers use `gray_300`.
 #'
 #' Body text and column labels use dark gray; subtitles and notes use a softer
 #' dark gray. Blue emphasizes titles, group headings, and summaries.
@@ -63,6 +64,7 @@ gt_theme_hokusai <- function(
   gridlines = FALSE,
   reversed = FALSE
 ) {
+  lifecycle::signal_stage("experimental", "gt_theme_hokusai()")
   if (!inherits(data, "gt_tbl")) {
     cli::cli_abort("{.arg data} must be a gt table object")
   }
@@ -279,31 +281,26 @@ gt_theme_hokusai <- function(
       locations = list(gt::cells_body(), gt::cells_stub())
     )
 
-  # gt errors on missing summaries. Apply each group separately so a group
-  # without summaries cannot discard styles for groups that have them.
+  # Style only groups that define summaries. Checking `_summary` keeps a
+  # missing summary from discarding styles for groups that have them, without
+  # swallowing unrelated errors.
   # TRUE avoids gt 1.3.0's everything() resolution error for summary rows.
   summary_style <- list(
     gt::cell_text(color = colors$structure, weight = "700"),
     .figure_css
   )
-  for (group in unique(data[["_stub_df"]]$group_id)) {
-    styled_table <- tryCatch(
-      gt::tab_style(
-        styled_table,
-        style = summary_style,
-        locations = gt::cells_summary(groups = group, rows = TRUE)
-      ),
-      error = function(e) styled_table
+  for (group in .summary_groups(data)) {
+    styled_table <- gt::tab_style(
+      styled_table,
+      style = summary_style,
+      locations = gt::cells_summary(groups = group, rows = TRUE)
     )
     # The stub label of a summary row is a separate location. Without this
     # the label stays body-colored while its own value is emphasized.
-    styled_table <- tryCatch(
-      gt::tab_style(
-        styled_table,
-        style = summary_style,
-        locations = gt::cells_stub_summary(groups = group, rows = TRUE)
-      ),
-      error = function(e) styled_table
+    styled_table <- gt::tab_style(
+      styled_table,
+      style = summary_style,
+      locations = gt::cells_stub_summary(groups = group, rows = TRUE)
     )
   }
 
@@ -314,13 +311,16 @@ gt_theme_hokusai <- function(
     ),
     .figure_css
   )
-  for (location in list(
-    gt::cells_grand_summary(rows = TRUE),
-    gt::cells_stub_grand_summary(rows = TRUE)
-  )) {
-    styled_table <- tryCatch(
-      gt::tab_style(styled_table, style = grand_style, locations = location),
-      error = function(e) styled_table
+  if (.has_grand_summary(data)) {
+    styled_table <- gt::tab_style(
+      styled_table,
+      style = grand_style,
+      locations = gt::cells_grand_summary(rows = TRUE)
+    )
+    styled_table <- gt::tab_style(
+      styled_table,
+      style = grand_style,
+      locations = gt::cells_stub_grand_summary(rows = TRUE)
     )
   }
 

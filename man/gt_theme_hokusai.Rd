@@ -55,18 +55,18 @@ and use the palette paper color for their text and rules (default: FALSE).}
 A styled gt table object.
 }
 \description{
-Blue typography and fine horizontal rules inspired by four supplied Hokusai
-reproductions. White backgrounds and pale paper tints keep analytical tables
-clean; color does not encode data values. No footer is added.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+Blue typography and fine horizontal rules inspired by Hokusai prints.
+White backgrounds and pale paper tints keep analytical tables clean;
+color does not encode data values. No footer is added.
 }
 \details{
-The palettes are stored as explicit hex values in \code{R/utils.R}. Mountain uses
-the supplied mountain landscape, wind the windy field, blossom the bullfinch
-and weeping cherry, and lake the lakeside landscape. Blues and paper colors
-are extracted from the digital reproductions; summary fills are lightened
-paper tones on a neutral white canvas. All palettes include a shared neutral
-gray scale (\code{gray_50} to \code{gray_900}). Zebra stripes use \code{gray_100}, gridlines
-use \code{gray_200}, and structural dividers use \code{gray_300}.
+Four palette variants (\code{"mountain"}, \code{"wind"}, \code{"blossom"}, \code{"lake"}) pair
+blues with paper tones. Summary fills are lightened paper tones on a
+neutral white canvas. All palettes include a shared neutral gray scale
+(\code{gray_50} to \code{gray_900}). Zebra stripes use \code{gray_100}, gridlines use
+\code{gray_200}, and structural dividers use \code{gray_300}.
 
 Body text and column labels use dark gray; subtitles and notes use a softer
 dark gray. Blue emphasizes titles, group headings, and summaries.

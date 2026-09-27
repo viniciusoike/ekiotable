@@ -158,6 +158,31 @@
   return(unname(family))
 }
 
+# Summary introspection -------------------------------------------------------
+
+# Assumes a gt table object with a `_summary` entry. Returns the row groups
+# that actually define summaries, so callers style only those groups instead
+# of catching gt's missing-summary error.
+.summary_groups <- function(data) {
+  summaries <- data[["_summary"]]
+  if (length(summaries) == 0L) {
+    return(character(0))
+  }
+  groups <- unlist(lapply(summaries, `[[`, "groups"), use.names = FALSE)
+  groups <- setdiff(groups, ":GRAND_SUMMARY:")
+  return(groups[!is.na(groups)])
+}
+
+# Assumes a gt table object with a `_summary` entry.
+.has_grand_summary <- function(data) {
+  summaries <- data[["_summary"]]
+  if (length(summaries) == 0L) {
+    return(FALSE)
+  }
+  groups <- unlist(lapply(summaries, `[[`, "groups"), use.names = FALSE)
+  return(":GRAND_SUMMARY:" %in% groups)
+}
+
 # Hokusai palettes ----------------------------------------------------------
 
 # Shared neutral scale for structural elements, independent of print colors.
