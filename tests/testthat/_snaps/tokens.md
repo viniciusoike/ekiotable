@@ -23,7 +23,7 @@
     Condition
       Error in `ekioplot::ekio_pal()`:
       ! Palette "chartreuse" not found.
-      i Available: "gold", "accent_blue", "accent_orange", "ekio_brand", "full", "full_muted", "cool3", "cool4", "blue", "gray", "stone", "teal", "green", "orange", "red", "purple", "purple_orange", "blue_red", ..., "inferno", and "plasma"
+      i Available: "gold", "accent_blue", "accent_orange", "ekio_brand", "full", "full_muted", "full_light", "spectrum_light", "cool3", "cool4", "blue", "gray", "stone", "teal", "green", "orange", "red", "purple", ..., "inferno", and "plasma"
 
 # the local basic tokens are pinned
 
