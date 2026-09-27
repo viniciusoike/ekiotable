@@ -1,5 +1,10 @@
 # ekiotable (development version)
 
+* Fixed tabular figures leaking to other tables. Both themes set
+  `font-variant-numeric` on their own body, stub, and summary cells instead
+  of adding an unscoped `.gt_row` rule, which in knitr and Quarto output
+  reached every gt table on the page.
+
 * Added GitHub Actions workflows for `R CMD check` and pkgdown. The checks run
   on macOS, Windows, and Linux across R release, devel, and the four previous
   releases. pkgdown builds the package site and deploys it to GitHub Pages on
