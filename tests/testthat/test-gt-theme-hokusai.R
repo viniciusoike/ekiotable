@@ -38,7 +38,7 @@ test_that("Hokusai uses a white canvas and respects layout and font arguments", 
   expect_equal(gt_option(out, "table_font_size"), "12px")
   expect_equal(gt_option(out, "row_striping_include_table_body"), TRUE)
   expect_equal(
-    font_stack(tail(gt_styles_at(out, "data"), 1)[[1]]$cell_text$font),
+    font_stack(body_font(out)),
     c("Lato", gt::default_fonts())
   )
   expect_equal(
@@ -178,4 +178,20 @@ test_that("gridlines can be enabled without changing data or emphasis", {
   }
   expect_snapshot(gt_theme_hokusai(tbl, gridlines = NA), error = TRUE)
   expect_snapshot(gt_theme_hokusai(tbl, reversed = NA), error = TRUE)
+})
+
+test_that("Hokusai gives every row cell tabular lining figures, scoped", {
+  local_font_options()
+  out <- gt_theme_hokusai(
+    summarized_tbl(),
+    reversed = TRUE,
+    stripe = TRUE,
+    font_body = "host_grotesk"
+  )
+  html <- html_block_css(out)
+  tags <- gt_row_tags(html)
+
+  expect_gt(length(tags), 0)
+  expect_true(all(grepl("tabular-nums lining-nums", tags, fixed = TRUE)))
+  expect_false(grepl("(^|\\n)\\s*\\.gt_row\\s*\\{", html))
 })

@@ -68,6 +68,10 @@
 
 # Font resolution -----------------------------------------------------------
 
+# Tabular lining figures keep digits in one column aligned across rows. gt
+# sets tabular-nums on right-aligned cells only; this covers every row cell.
+.figure_css <- "font-variant-numeric: tabular-nums lining-nums;"
+
 .ekio_font_stacks <- c(
   lora = "Lora",
   lato = "Lato",

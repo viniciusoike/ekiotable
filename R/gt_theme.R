@@ -219,17 +219,21 @@ gt_theme_ekio <- function(
       style = gt::cell_text(color = colors$text_light),
       locations = gt::cells_footnotes()
     ) |>
-    # gt inlines this into each matching element rather than emitting a
-    # document-level rule, so it cannot reach another table on the page.
-    gt::opt_css(
-      css = ".gt_row { font-variant-numeric: tabular-nums lining-nums; }",
-      add = TRUE
+    # A cell-level style, not opt_css(): gt copies opt_css() rules verbatim
+    # into the <style> block, where an unscoped selector reaches every gt
+    # table on the page.
+    gt::tab_style(
+      style = .figure_css,
+      locations = list(gt::cells_body(), gt::cells_stub())
     )
 
   # gt errors on missing summaries. Apply each group separately so a group
   # without summaries cannot discard styles for groups that have them.
   # TRUE avoids gt 1.3.0's everything() resolution error for summary rows.
-  summary_style <- gt::cell_text(color = colors$structure, weight = "700")
+  summary_style <- list(
+    gt::cell_text(color = colors$structure, weight = "700"),
+    .figure_css
+  )
   for (group in unique(data[["_stub_df"]]$group_id)) {
     styled_table <- tryCatch(
       gt::tab_style(
@@ -251,9 +255,12 @@ gt_theme_ekio <- function(
     )
   }
 
-  grand_style <- gt::cell_text(
-    color = ekioplot::ekio_text_on(colors$structure_dark),
-    weight = "700"
+  grand_style <- list(
+    gt::cell_text(
+      color = ekioplot::ekio_text_on(colors$structure_dark),
+      weight = "700"
+    ),
+    .figure_css
   )
   for (location in list(
     gt::cells_grand_summary(rows = TRUE),

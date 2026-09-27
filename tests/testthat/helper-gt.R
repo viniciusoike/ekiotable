@@ -55,3 +55,42 @@ summary_entries <- function(tbl, locname) {
 font_stack <- function(css) {
   return(gsub("^'|'$", "", trimws(strsplit(css, ",")[[1]])))
 }
+
+# A table that exercises every cell class that carries figures: body cells
+# of both types, stub labels, group summaries, and the grand summary.
+summarized_tbl <- function() {
+  d <- data.frame(
+    g = c("a", "a", "b"),
+    label = c("x", "y", "z"),
+    code = c("01", "02", "03"),
+    n = 1:3
+  )
+  gt::gt(d, groupname_col = "g", rowname_col = "label") |>
+    gt::summary_rows(
+      groups = "a",
+      columns = "n",
+      fns = list(total = ~ sum(.))
+    ) |>
+    gt::grand_summary_rows(columns = "n", fns = list(total = ~ sum(.)))
+}
+
+# Render with a <style> block, as knitr and Quarto do, rather than inlining.
+html_block_css <- function(tbl) {
+  return(as.character(gt::as_raw_html(tbl, inline_css = FALSE)))
+}
+
+# The opening tags of every row cell, stub and summary cells included.
+gt_row_tags <- function(html) {
+  pattern <- "<t[dh][^>]*class=\"gt_row[^\"]*\"[^>]*>"
+  return(regmatches(html, gregexpr(pattern, html))[[1]])
+}
+
+# The font of the last body style that names one. Body cells also carry
+# border and figure styles, so position alone does not identify it.
+body_font <- function(tbl) {
+  fonts <- lapply(gt_styles_at(tbl, "data"), function(style) {
+    if (is.list(style)) style$cell_text$font else NULL
+  })
+  fonts <- Filter(Negate(is.null), fonts)
+  return(fonts[[length(fonts)]])
+}

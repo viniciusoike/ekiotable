@@ -148,11 +148,21 @@ test_that("spanners get the column label treatment", {
   expect_equal(style$cell_text$weight, "700")
 })
 
-test_that("numeric cells get tabular figures", {
+test_that("every row cell gets tabular lining figures", {
   local_font_options()
-  html <- as.character(gt::as_raw_html(gt_theme_ekio(small_tbl())))
+  tags <- gt_row_tags(html_block_css(gt_theme_ekio(summarized_tbl())))
 
-  expect_equal(grepl("tabular-nums", html, fixed = TRUE), TRUE)
+  expect_gt(length(tags), 0)
+  expect_true(all(grepl("tabular-nums lining-nums", tags, fixed = TRUE)))
+})
+
+test_that("the figure style stays inside its own table", {
+  local_font_options()
+  html <- html_block_css(gt_theme_ekio(summarized_tbl()))
+
+  # An unscoped selector in the <style> block would reach every gt table on
+  # the page.
+  expect_false(grepl("(^|\\n)\\s*\\.gt_row\\s*\\{", html))
 })
 
 test_that("the fonts resolve for the theme", {
@@ -180,12 +190,12 @@ test_that("the numeric font inherits the body font and respects overrides", {
 
   out <- gt_theme_ekio(tbl, font_body = "Georgia")
   expect_equal(
-    tail(gt_styles_at(out, "data"), 1)[[1]]$cell_text$font,
+    body_font(out),
     "Georgia"
   )
 
   out <- gt_theme_ekio(tbl, font_body = "Georgia", font_numeric = "Lato")
-  expect_equal(tail(gt_styles_at(out, "data"), 1)[[1]]$cell_text$font, "Lato")
+  expect_equal(body_font(out), "Lato")
 })
 
 test_that("the body neutrals are warm, matching the default surface", {
