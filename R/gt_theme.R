@@ -227,31 +227,26 @@ gt_theme_ekio <- function(
       locations = list(gt::cells_body(), gt::cells_stub())
     )
 
-  # gt errors on missing summaries. Apply each group separately so a group
-  # without summaries cannot discard styles for groups that have them.
+  # Style only groups that define summaries. Checking `_summary` keeps a
+  # missing summary from discarding styles for groups that have them, without
+  # swallowing unrelated errors.
   # TRUE avoids gt 1.3.0's everything() resolution error for summary rows.
   summary_style <- list(
     gt::cell_text(color = colors$structure, weight = "700"),
     .figure_css
   )
-  for (group in unique(data[["_stub_df"]]$group_id)) {
-    styled_table <- tryCatch(
-      gt::tab_style(
-        styled_table,
-        style = summary_style,
-        locations = gt::cells_summary(groups = group, rows = TRUE)
-      ),
-      error = function(e) styled_table
+  for (group in .summary_groups(data)) {
+    styled_table <- gt::tab_style(
+      styled_table,
+      style = summary_style,
+      locations = gt::cells_summary(groups = group, rows = TRUE)
     )
     # The stub label of a summary row is a separate location. Without this
     # the label stays body-colored while its own value is emphasized.
-    styled_table <- tryCatch(
-      gt::tab_style(
-        styled_table,
-        style = summary_style,
-        locations = gt::cells_stub_summary(groups = group, rows = TRUE)
-      ),
-      error = function(e) styled_table
+    styled_table <- gt::tab_style(
+      styled_table,
+      style = summary_style,
+      locations = gt::cells_stub_summary(groups = group, rows = TRUE)
     )
   }
 
@@ -262,13 +257,16 @@ gt_theme_ekio <- function(
     ),
     .figure_css
   )
-  for (location in list(
-    gt::cells_grand_summary(rows = TRUE),
-    gt::cells_stub_grand_summary(rows = TRUE)
-  )) {
-    styled_table <- tryCatch(
-      gt::tab_style(styled_table, style = grand_style, locations = location),
-      error = function(e) styled_table
+  if (.has_grand_summary(data)) {
+    styled_table <- gt::tab_style(
+      styled_table,
+      style = grand_style,
+      locations = gt::cells_grand_summary(rows = TRUE)
+    )
+    styled_table <- gt::tab_style(
+      styled_table,
+      style = grand_style,
+      locations = gt::cells_stub_grand_summary(rows = TRUE)
     )
   }
 
