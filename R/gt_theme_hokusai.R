@@ -3,14 +3,13 @@
 #' Apply a Minimal Hokusai Theme to GT Tables
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
-#'
-#' Blue typography and fine horizontal rules inspired by Hokusai prints.
-#' White backgrounds and pale paper tints keep analytical tables clean;
-#' color does not encode data values. No footer is added.
+#' The recommended theme for reports, articles, and general use. Blue
+#' typography and fine horizontal rules take their colors from Hokusai
+#' prints. Column labels sit on a blue band, body rows are striped, and color
+#' never encodes data values. No footer is added.
 #'
 #' @inheritParams gt_theme_ekio
-#' @param font_size Numeric. Body font size in pixels (default: 12). Column
+#' @param font_size Numeric. Body font size in pixels (default: 14). Column
 #'   labels and the subtitle are 2px larger, the title 8px larger, and source
 #'   notes and footnotes 1px smaller.
 #' @param font_stub A font family or registry key for stub (row label) cells.
@@ -18,20 +17,23 @@
 #'   font, so row labels stay with the body typography unless you move them.
 #' @param palette One of `"mountain"` (default), `"wind"`, `"blossom"`, or
 #'   `"lake"`. Each uses blues and paper tones extracted from a different print.
-#' @param stripe Logical. Apply subtle alternating row shading (default: FALSE).
+#' @param stripe Logical. Apply subtle alternating row shading (default: TRUE).
 #' @param gridlines Logical. Show light-gray horizontal and vertical cell rules
 #'   (default: FALSE). Section and outer accent rules remain visible.
 #' @param reversed Logical. Fill column labels and spanners with the palette blue
-#'   and use the palette paper color for their text and rules (default: FALSE).
+#'   and use the palette paper color for their text and rules (default: TRUE).
+#'   `FALSE` sets labels in dark gray on the white canvas.
 #' @details
 #' Four palette variants (`"mountain"`, `"wind"`, `"blossom"`, `"lake"`) pair
-#' blues with paper tones. Summary fills are lightened paper tones on a
-#' neutral white canvas. All palettes include a shared neutral gray scale
-#' (`gray_50` to `gray_900`). Zebra stripes use `gray_100`, gridlines use
-#' `gray_200`, and structural dividers use `gray_300`.
+#' blues with paper tones on a neutral white canvas. All palettes include a
+#' shared neutral gray scale (`gray_50` to `gray_900`). Zebra stripes use
+#' `gray_100`, gridlines use `gray_200`, and structural dividers use
+#' `gray_300`.
 #'
-#' Body text and column labels use dark gray; subtitles and notes use a softer
-#' dark gray. Blue emphasizes titles, group headings, and summaries.
+#' Body text uses dark gray; subtitles and notes use a softer dark gray. Blue
+#' marks titles and summaries. Row group headings keep the body color under a
+#' blue rule. Summary rows carry no fill: a thin gray rule opens each group
+#' summary and a double blue rule opens the grand summary.
 #'
 #' Column labels sit above the body in size and are set in semibold. Stub cells
 #' are also semibold. Families that ship semibold under a separate family name,
@@ -49,22 +51,21 @@
 #'
 #' head(mtcars) |>
 #'   gt::gt() |>
-#'   gt_theme_hokusai(palette = "lake", stripe = TRUE, gridlines = TRUE)
+#'   gt_theme_hokusai(palette = "lake", reversed = FALSE, gridlines = TRUE)
 gt_theme_hokusai <- function(
   data,
   palette = c("mountain", "wind", "blossom", "lake"),
   table_width = "100%",
-  font_size = 12,
-  stripe = FALSE,
+  font_size = 14,
+  stripe = TRUE,
   font_title = NULL,
   font_body = NULL,
   font_numeric = NULL,
   font_labels = NULL,
   font_stub = NULL,
   gridlines = FALSE,
-  reversed = FALSE
+  reversed = TRUE
 ) {
-  lifecycle::signal_stage("experimental", "gt_theme_hokusai()")
   if (!inherits(data, "gt_tbl")) {
     cli::cli_abort("{.arg data} must be a gt table object")
   }
@@ -112,7 +113,6 @@ gt_theme_hokusai <- function(
     editorial = pal$blue,
     structure = pal$blue,
     structure_dark = pal$ink,
-    structure_light = pal$wash,
     text = pal$gray_800,
     text_mid = pal$gray_700,
     text_light = pal$gray_600,
@@ -156,7 +156,7 @@ gt_theme_hokusai <- function(
       column_labels.background.color = label_background,
       column_labels.font.size = gt::px(size_labels),
       column_labels.font.weight = "600",
-      column_labels.padding = gt::px(10),
+      column_labels.padding = gt::px(8),
       column_labels.border.top.style = "none",
       column_labels.border.bottom.style = "solid",
       column_labels.border.bottom.width = gt::px(1),
@@ -178,14 +178,18 @@ gt_theme_hokusai <- function(
       row.striping.include_stub = stripe,
       row.striping.background_color = colors$stripe_bg,
 
-      summary_row.background.color = colors$structure_light,
+      # No summary fills. A fill competes with the stripes, and at the tint
+      # the paper tones allow it reads lighter than a striped row.
+      summary_row.background.color = pal$canvas,
       summary_row.padding = gt::px(8),
-      summary_row.border.style = "none",
+      summary_row.border.style = "solid",
+      summary_row.border.width = gt::px(1),
+      summary_row.border.color = colors$border,
 
-      grand_summary_row.background.color = pal$wash,
+      grand_summary_row.background.color = pal$canvas,
       grand_summary_row.padding = gt::px(8),
-      grand_summary_row.border.style = "solid",
-      grand_summary_row.border.width = gt::px(1),
+      grand_summary_row.border.style = "double",
+      grand_summary_row.border.width = gt::px(3),
       grand_summary_row.border.color = colors$structure,
 
       table.border.top.style = "solid",
@@ -213,18 +217,20 @@ gt_theme_hokusai <- function(
           weight = "600",
           font = stack_labels
         ),
-        gt::cell_fill(color = label_background)
+        gt::cell_fill(color = label_background),
+        .header_seam_css(label_background)
       ),
-      locations = gt::cells_column_labels()
+      locations = list(gt::cells_column_labels(), gt::cells_stubhead())
     ) |>
     gt::tab_style(
       style = list(
         gt::cell_text(
           color = label_color,
-          weight = "700",
+          weight = "600",
           font = stack_labels
         ),
-        gt::cell_fill(color = label_background)
+        gt::cell_fill(color = label_background),
+        .header_seam_css(label_background)
       ),
       locations = gt::cells_column_spanners()
     ) |>
@@ -248,12 +254,14 @@ gt_theme_hokusai <- function(
       locations = gt::cells_title(groups = "subtitle")
     ) |>
     # No stub fill. A mid-tone keeps the row label below the group heading
-    # and above nothing, which is the level it occupies.
+    # and above nothing, which is the level it occupies. gt centers a factor
+    # stub, so the alignment is set explicitly.
     gt::tab_style(
       style = gt::cell_text(
         color = colors$text_mid,
         weight = "600",
-        font = stack_stub
+        font = stack_stub,
+        align = "left"
       ),
       locations = gt::cells_stub()
     ) |>
@@ -261,8 +269,10 @@ gt_theme_hokusai <- function(
       style = gt::cell_text(font = stack_numeric),
       locations = gt::cells_body(columns = tidyselect::where(is.numeric))
     ) |>
+    # Body text color, so a group heading does not read as a summary. The
+    # blue rule above it carries the accent.
     gt::tab_style(
-      style = gt::cell_text(color = colors$editorial, weight = "700"),
+      style = gt::cell_text(color = colors$text, weight = "700"),
       locations = gt::cells_row_groups()
     ) |>
     gt::tab_style(
@@ -280,6 +290,16 @@ gt_theme_hokusai <- function(
       style = .figure_css,
       locations = list(gt::cells_body(), gt::cells_stub())
     )
+
+  # gt keeps one raw CSS string per cell, so the indent restates the figure
+  # style it would otherwise replace.
+  if (.has_row_groups(data)) {
+    styled_table <- gt::tab_style(
+      styled_table,
+      style = paste(.figure_css, .stub_indent_css),
+      locations = gt::cells_stub()
+    )
+  }
 
   # Style only groups that define summaries. Checking `_summary` keeps a
   # missing summary from discarding styles for groups that have them, without
@@ -301,6 +321,21 @@ gt_theme_hokusai <- function(
       styled_table,
       style = summary_style,
       locations = gt::cells_stub_summary(groups = group, rows = TRUE)
+    )
+    # gt rules off the last summary row in the summary rule color. In a
+    # collapsed table that edge wins over the blue rule of the next group.
+    last_row <- .summary_row_count(data, group)
+    styled_table <- gt::tab_style(
+      styled_table,
+      style = gt::cell_borders(
+        sides = "bottom",
+        color = colors$editorial,
+        weight = gt::px(1)
+      ),
+      locations = list(
+        gt::cells_summary(groups = group, rows = last_row),
+        gt::cells_stub_summary(groups = group, rows = last_row)
+      )
     )
   }
 

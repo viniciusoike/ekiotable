@@ -8,15 +8,15 @@ gt_theme_hokusai(
   data,
   palette = c("mountain", "wind", "blossom", "lake"),
   table_width = "100\%",
-  font_size = 12,
-  stripe = FALSE,
+  font_size = 14,
+  stripe = TRUE,
   font_title = NULL,
   font_body = NULL,
   font_numeric = NULL,
   font_labels = NULL,
   font_stub = NULL,
   gridlines = FALSE,
-  reversed = FALSE
+  reversed = TRUE
 )
 }
 \arguments{
@@ -27,11 +27,11 @@ gt_theme_hokusai(
 
 \item{table_width}{Character. Width of the table (default: \code{"100\%"}).}
 
-\item{font_size}{Numeric. Body font size in pixels (default: 12). Column
+\item{font_size}{Numeric. Body font size in pixels (default: 14). Column
 labels and the subtitle are 2px larger, the title 8px larger, and source
 notes and footnotes 1px smaller.}
 
-\item{stripe}{Logical. Apply subtle alternating row shading (default: FALSE).}
+\item{stripe}{Logical. Apply subtle alternating row shading (default: TRUE).}
 
 \item{font_title, font_body, font_numeric, font_labels}{A font family or registry
 key (\code{lora}, \code{lato}, \code{georgia}, \code{roboto_slab}, \code{fira_code}, \code{host_grotesk}).
@@ -49,27 +49,29 @@ font, so row labels stay with the body typography unless you move them.}
 (default: FALSE). Section and outer accent rules remain visible.}
 
 \item{reversed}{Logical. Fill column labels and spanners with the palette blue
-and use the palette paper color for their text and rules (default: FALSE).}
+and use the palette paper color for their text and rules (default: TRUE).
+\code{FALSE} sets labels in dark gray on the white canvas.}
 }
 \value{
 A styled gt table object.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-Blue typography and fine horizontal rules inspired by Hokusai prints.
-White backgrounds and pale paper tints keep analytical tables clean;
-color does not encode data values. No footer is added.
+The recommended theme for reports, articles, and general use. Blue
+typography and fine horizontal rules take their colors from Hokusai
+prints. Column labels sit on a blue band, body rows are striped, and color
+never encodes data values. No footer is added.
 }
 \details{
 Four palette variants (\code{"mountain"}, \code{"wind"}, \code{"blossom"}, \code{"lake"}) pair
-blues with paper tones. Summary fills are lightened paper tones on a
-neutral white canvas. All palettes include a shared neutral gray scale
-(\code{gray_50} to \code{gray_900}). Zebra stripes use \code{gray_100}, gridlines use
-\code{gray_200}, and structural dividers use \code{gray_300}.
+blues with paper tones on a neutral white canvas. All palettes include a
+shared neutral gray scale (\code{gray_50} to \code{gray_900}). Zebra stripes use
+\code{gray_100}, gridlines use \code{gray_200}, and structural dividers use
+\code{gray_300}.
 
-Body text and column labels use dark gray; subtitles and notes use a softer
-dark gray. Blue emphasizes titles, group headings, and summaries.
+Body text uses dark gray; subtitles and notes use a softer dark gray. Blue
+marks titles and summaries. Row group headings keep the body color under a
+blue rule. Summary rows carry no fill: a thin gray rule opens each group
+summary and a double blue rule opens the grand summary.
 
 Column labels sit above the body in size and are set in semibold. Stub cells
 are also semibold. Families that ship semibold under a separate family name,
@@ -86,5 +88,5 @@ head(mtcars) |>
 
 head(mtcars) |>
   gt::gt() |>
-  gt_theme_hokusai(palette = "lake", stripe = TRUE, gridlines = TRUE)
+  gt_theme_hokusai(palette = "lake", reversed = FALSE, gridlines = TRUE)
 }

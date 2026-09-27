@@ -80,6 +80,16 @@ gt_theme_ekio <- function(
     stripe_bg = .ekio("stone", 100)
   )
 
+  label_style <- list(
+    gt::cell_text(
+      color = ekioplot::ekio_text_on(colors$structure),
+      weight = "600",
+      font = font_labels
+    ),
+    gt::cell_fill(color = colors$structure),
+    .header_seam_css(colors$structure)
+  )
+
   styled_table <- data |>
     gt::opt_table_font(font = font_body) |>
     gt::tab_options(
@@ -149,15 +159,8 @@ gt_theme_ekio <- function(
       footnotes.background.color = surface
     ) |>
     gt::tab_style(
-      style = list(
-        gt::cell_text(
-          color = ekioplot::ekio_text_on(colors$structure),
-          weight = "600",
-          font = font_labels
-        ),
-        gt::cell_fill(color = colors$structure)
-      ),
-      locations = gt::cells_column_labels()
+      style = label_style,
+      locations = list(gt::cells_column_labels(), gt::cells_stubhead())
     ) |>
     gt::tab_style(
       style = list(
@@ -166,7 +169,8 @@ gt_theme_ekio <- function(
           weight = "700",
           font = font_labels
         ),
-        gt::cell_fill(color = colors$structure)
+        gt::cell_fill(color = colors$structure),
+        .header_seam_css(colors$structure)
       ),
       locations = gt::cells_column_spanners()
     ) |>
@@ -198,17 +202,24 @@ gt_theme_ekio <- function(
       locations = gt::cells_title(groups = "subtitle")
     ) |>
     # No stub fill. A mid-tone keeps the row label below the group heading
-    # and above nothing, which is the level it occupies.
+    # and above nothing, which is the level it occupies. gt centers a factor
+    # stub, so the alignment is set explicitly.
     gt::tab_style(
-      style = gt::cell_text(color = colors$text_mid, weight = "600"),
+      style = gt::cell_text(
+        color = colors$text_mid,
+        weight = "600",
+        align = "left"
+      ),
       locations = gt::cells_stub()
     ) |>
     gt::tab_style(
       style = gt::cell_text(font = font_numeric),
       locations = gt::cells_body(columns = tidyselect::where(is.numeric))
     ) |>
+    # Body text color, so a group heading does not read as a summary. The
+    # blue rule above it carries the accent.
     gt::tab_style(
-      style = gt::cell_text(color = colors$editorial, weight = "700"),
+      style = gt::cell_text(color = colors$text, weight = "700"),
       locations = gt::cells_row_groups()
     ) |>
     gt::tab_style(
@@ -226,6 +237,16 @@ gt_theme_ekio <- function(
       style = .figure_css,
       locations = list(gt::cells_body(), gt::cells_stub())
     )
+
+  # gt keeps one raw CSS string per cell, so the indent restates the figure
+  # style it would otherwise replace.
+  if (.has_row_groups(data)) {
+    styled_table <- gt::tab_style(
+      styled_table,
+      style = paste(.figure_css, .stub_indent_css),
+      locations = gt::cells_stub()
+    )
+  }
 
   # Style only groups that define summaries. Checking `_summary` keeps a
   # missing summary from discarding styles for groups that have them, without

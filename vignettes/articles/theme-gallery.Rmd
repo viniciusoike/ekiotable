@@ -17,9 +17,9 @@ total, footnotes, and a source note. The examples adapt the cars and pizza
 sales prototypes and use datasets bundled with **gt**.
 
 Build the table first, including summaries and notes, then apply the theme.
-All Hokusai examples use `stripe = TRUE` and `gridlines = FALSE`: only the
-palette changes. The shared neutral stripes stay the same; look at the title,
-section rules, group headings, and summary fills to compare colors.
+The Hokusai examples use the theme defaults, a blue header band and striped
+rows, and change only the palette. Compare the title, the header band, and the
+rules that open each group and summary.
 
 ## Build the examples
 
@@ -75,6 +75,10 @@ pizza_data <- aggregate(
   FUN = sum
 )
 pizza_data$average_price <- pizza_data$revenue / pizza_data$pizzas
+pizza_data$category <- paste0(
+  toupper(substr(pizza_data$category, 1, 1)),
+  substring(pizza_data$category, 2)
+)
 pizza_data$size <- factor(
   pizza_data$size,
   levels = c("S", "M", "L", "XL", "XXL")
@@ -101,28 +105,33 @@ complete_table <- pizza_data |>
     average_price = "Average price"
   ) |>
   fmt_integer(columns = pizzas) |>
-  fmt_currency(columns = c(revenue, average_price), currency = "USD") |>
+  fmt_currency(columns = revenue, currency = "USD", decimals = 0) |>
+    fmt_currency(columns = average_price, currency = "USD") |>
   summary_rows(
     groups = everything(),
     columns = pizzas,
     fns = list(Total = ~ sum(.)),
+    missing_text = "",
     fmt = ~ fmt_integer(.)
   ) |>
   summary_rows(
     groups = everything(),
     columns = revenue,
     fns = list(Total = ~ sum(.)),
-    fmt = ~ fmt_currency(., currency = "USD")
+    missing_text = "",
+    fmt = ~ fmt_currency(., currency = "USD", decimals = 0)
   ) |>
   grand_summary_rows(
     columns = pizzas,
     fns = list("Grand total" = ~ sum(.)),
+    missing_text = "",
     fmt = ~ fmt_integer(.)
   ) |>
   grand_summary_rows(
     columns = revenue,
     fns = list("Grand total" = ~ sum(.)),
-    fmt = ~ fmt_currency(., currency = "USD")
+    missing_text = "",
+    fmt = ~ fmt_currency(., currency = "USD", decimals = 0)
   ) |>
   tab_footnote(
     footnote = "Counts pizzas sold, not distinct orders; an order can contain several pizzas.",
@@ -137,13 +146,104 @@ complete_table <- pizza_data |>
   )
 ```
 
+## Hokusai
+
+`gt_theme_hokusai()` is the recommended theme for reports and articles. Column
+labels sit on a blue band, body rows are striped, and fine rules mark the
+structure: a blue rule opens each row group, a gray rule opens each group
+summary, and a double blue rule opens the grand total. Summary rows carry no
+fill. Pass `reversed = FALSE` for dark labels on white, `stripe = FALSE` to
+drop the stripes, or `gridlines = TRUE` to add light cell rules. These are theme
+colors, not a scale encoding the values in the table.
+
+### Mountain
+
+Deep blue band and rules with warm cream labels. The darkest of the four
+palettes and the default.
+
+::: {data-bs-theme="light"}
+
+```{r mountain-simple}
+simple_table |> gt_theme_hokusai(palette = "mountain")
+```
+
+:::
+
+::: {data-bs-theme="light"}
+
+```{r mountain-complete}
+complete_table |> gt_theme_hokusai(palette = "mountain")
+```
+
+:::
+
+### Wind
+
+Muted slate blue with warm gray labels. The quietest band of the four.
+
+::: {data-bs-theme="light"}
+
+```{r wind-simple}
+simple_table |> gt_theme_hokusai(palette = "wind")
+```
+
+:::
+
+::: {data-bs-theme="light"}
+
+```{r wind-complete}
+complete_table |> gt_theme_hokusai(palette = "wind")
+```
+
+:::
+
+### Blossom
+
+Dark blue titles with a separate, brighter blue band and beige labels.
+
+::: {data-bs-theme="light"}
+
+```{r blossom-simple}
+simple_table |> gt_theme_hokusai(palette = "blossom")
+```
+
+:::
+
+::: {data-bs-theme="light"}
+
+```{r blossom-complete}
+complete_table |> gt_theme_hokusai(palette = "blossom")
+```
+
+:::
+
+### Lake
+
+Slate-blue titles with a lighter blue band and pale cream labels.
+
+::: {data-bs-theme="light"}
+
+```{r lake-simple}
+simple_table |> gt_theme_hokusai(palette = "lake")
+```
+
+:::
+
+::: {data-bs-theme="light"}
+
+```{r lake-complete}
+complete_table |> gt_theme_hokusai(palette = "lake")
+```
+
+:::
+
 ## EKIO
 
 `gt_theme_ekio()` uses filled blue column headers and spanners, unfilled group
-headings with blue rules, and a dark grand total. The table sits on the warm
-offwhite surface `ekioplot::theme_ekio()` draws on, so a chart and a table in
-one document share a background. Pass `background = "white"`, `"cold"`, or
-`"transparent"` to change it. It does not add a footer.
+headings with blue rules, tinted subtotals, and a dark grand total. The table
+sits on the warm offwhite surface `ekioplot::theme_ekio()` draws on, so a chart
+and a table in one document share a background. Pass `background = "white"`,
+`"cold"`, or `"transparent"` to change it. It does not add a footer.
 
 ::: {data-bs-theme="light"}
 
@@ -157,100 +257,6 @@ simple_table |> gt_theme_ekio(stripe = TRUE)
 
 ```{r ekio-complete}
 complete_table |> gt_theme_ekio(stripe = TRUE)
-```
-
-:::
-
-## Hokusai palettes
-
-Hokusai uses white headers, fine rules, and pale summary backgrounds.
-Typography, striping, and gridlines are held constant across the four palettes.
-These are theme colors, not a scale encoding the values in the table.
-
-### Mountain
-
-Deep blue titles and accents with a nearly white, warm summary tint.
-
-::: {data-bs-theme="light"}
-
-```{r mountain-simple}
-simple_table |>
-  gt_theme_hokusai(palette = "mountain", stripe = TRUE, gridlines = FALSE)
-```
-
-:::
-
-::: {data-bs-theme="light"}
-
-```{r mountain-complete}
-complete_table |>
-  gt_theme_hokusai(palette = "mountain", stripe = TRUE, gridlines = FALSE)
-```
-
-:::
-
-### Wind
-
-Muted slate-blue titles and accents with a warm gray summary tint.
-
-::: {data-bs-theme="light"}
-
-```{r wind-simple}
-simple_table |>
-  gt_theme_hokusai(palette = "wind", stripe = TRUE, gridlines = FALSE)
-```
-
-:::
-
-::: {data-bs-theme="light"}
-
-```{r wind-complete}
-complete_table |>
-  gt_theme_hokusai(palette = "wind", stripe = TRUE, gridlines = FALSE)
-```
-
-:::
-
-### Blossom
-
-Dark blue titles, a separate blue accent, and a pale beige summary tint.
-
-::: {data-bs-theme="light"}
-
-```{r blossom-simple}
-simple_table |>
-  gt_theme_hokusai(palette = "blossom", stripe = TRUE, gridlines = FALSE)
-```
-
-:::
-
-::: {data-bs-theme="light"}
-
-```{r blossom-complete}
-complete_table |>
-  gt_theme_hokusai(palette = "blossom", stripe = TRUE, gridlines = FALSE)
-```
-
-:::
-
-### Lake
-
-Slate-blue titles, a lighter blue accent, and a pale cream summary tint.
-
-::: {data-bs-theme="light"}
-
-```{r lake-simple}
-simple_table |>
-  gt_theme_hokusai(palette = "lake", stripe = TRUE, gridlines = FALSE)
-```
-
-:::
-
-::: {data-bs-theme="light"}
-
-```{r lake-complete}
-complete_table |>
-  gt_theme_hokusai(palette = "lake", stripe = TRUE, gridlines = FALSE)
 ```
 
 :::

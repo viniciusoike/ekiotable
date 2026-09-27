@@ -12,7 +12,8 @@ test_that("Hokusai palettes render plain and grouped analytical tables", {
     out <- gt_theme_hokusai(tbl, palette = palette)
     expect_s3_class(out, "gt_tbl")
     expect_equal(out[["_data"]], tbl[["_data"]])
-    expect_equal(nrow(summary_entries(out, "summary_cells")), 2L)
+    # Value and stub cells, each with the summary style and the closing rule.
+    expect_equal(nrow(summary_entries(out, "summary_cells")), 4L)
     expect_equal(nrow(summary_entries(out, "grand_summary_cells")), 2L)
     expect_match(gt::as_raw_html(out), "tabular-nums", fixed = TRUE)
     expect_match(
@@ -29,6 +30,7 @@ test_that("Hokusai uses a white canvas and respects layout and font arguments", 
     table_width = "80%",
     font_size = 12,
     stripe = TRUE,
+    reversed = FALSE,
     font_body = "Georgia",
     font_numeric = "Lato"
   )
@@ -42,21 +44,64 @@ test_that("Hokusai uses a white canvas and respects layout and font arguments", 
     c("Lato", gt::default_fonts())
   )
   expect_equal(
-    gt_option(gt_theme_hokusai(small_tbl()), "row_striping_include_table_body"),
+    gt_option(
+      gt_theme_hokusai(small_tbl(), stripe = FALSE),
+      "row_striping_include_table_body"
+    ),
     FALSE
   )
+})
+
+test_that("Hokusai defaults to a filled header band and striped rows", {
+  local_font_options()
+  out <- gt_theme_hokusai(small_tbl())
+
+  expect_equal(gt_option(out, "row_striping_include_table_body"), TRUE)
+  expect_equal(gt_option(out, "column_labels_background_color"), "#204D6D")
+  expect_equal(
+    gt_styles_at(out, "columns_columns")[[1]]$cell_text$color,
+    "#EFEADE"
+  )
+})
+
+test_that("the header band stays light: tight padding, one label weight", {
+  local_font_options()
+  out <- small_tbl() |>
+    gt::tab_spanner(label = "Values", columns = gt::everything()) |>
+    gt_theme_hokusai()
+
+  expect_equal(gt_option(out, "column_labels_padding"), "8px")
+  expect_equal(
+    gt_styles_at(out, "columns_groups")[[1]]$cell_text$weight,
+    "600"
+  )
+})
+
+test_that("summary rows are marked by rules and ink, not fills", {
+  local_font_options()
+  out <- gt_theme_hokusai(summarized_tbl())
+
+  for (row in c("summary_row", "grand_summary_row")) {
+    expect_equal(gt_option(out, paste0(row, "_background_color")), "#FFFFFF")
+  }
+  expect_equal(gt_option(out, "summary_row_border_style"), "solid")
+  expect_equal(gt_option(out, "summary_row_border_width"), "1px")
+  expect_equal(gt_option(out, "summary_row_border_color"), "#D4D4D4")
+  expect_equal(gt_option(out, "grand_summary_row_border_style"), "double")
+  expect_equal(gt_option(out, "grand_summary_row_border_width"), "3px")
+  expect_equal(gt_option(out, "grand_summary_row_border_color"), "#204D6D")
 })
 
 test_that("column labels sit above the body and carry a semibold face", {
   local_font_options()
   out <- gt_theme_hokusai(small_tbl())
 
-  expect_equal(gt_option(out, "table_font_size"), "12px")
-  expect_equal(gt_option(out, "column_labels_font_size"), "14px")
-  expect_equal(gt_option(out, "heading_subtitle_font_size"), "14px")
-  expect_equal(gt_option(out, "heading_title_font_size"), "20px")
-  expect_equal(gt_option(out, "source_notes_font_size"), "11px")
-  expect_equal(gt_option(out, "footnotes_font_size"), "11px")
+  expect_equal(gt_option(out, "table_font_size"), "14px")
+  expect_equal(gt_option(out, "column_labels_font_size"), "16px")
+  expect_equal(gt_option(out, "heading_subtitle_font_size"), "16px")
+  expect_equal(gt_option(out, "heading_title_font_size"), "22px")
+  expect_equal(gt_option(out, "source_notes_font_size"), "13px")
+  expect_equal(gt_option(out, "footnotes_font_size"), "13px")
   expect_equal(gt_option(out, "column_labels_font_weight"), "600")
 
   scaled <- gt_theme_hokusai(small_tbl(), font_size = 16)
@@ -168,7 +213,7 @@ test_that("gridlines can be enabled without changing data or emphasis", {
     expect_equal(gt_option(out, "table_font_color"), "#262626")
     expect_equal(
       gt_styles_at(out, "row_groups")[[1]]$cell_text$color,
-      "#204D6D"
+      "#262626"
     )
     expect_equal(
       gt_styles_at(out, "source_notes")[[1]]$cell_text$color,
@@ -194,4 +239,28 @@ test_that("Hokusai gives every row cell tabular lining figures, scoped", {
   expect_gt(length(tags), 0)
   expect_true(all(grepl("tabular-nums lining-nums", tags, fixed = TRUE)))
   expect_false(grepl("(^|\\n)\\s*\\.gt_row\\s*\\{", html))
+})
+
+test_that("the group rule survives a summary row above it", {
+  local_font_options()
+  d <- data.frame(g = c("a", "a", "b"), label = c("x", "y", "z"), n = 1:3)
+  tbl <- gt::gt(d, groupname_col = "g", rowname_col = "label") |>
+    gt::summary_rows(
+      groups = "a",
+      columns = "n",
+      fns = list(Total = ~ sum(.), Mean = ~ mean(.))
+    )
+  tags <- grep(
+    "gt_summary_row",
+    gt_row_tags(html_block_css(gt_theme_hokusai(tbl))),
+    value = TRUE
+  )
+  blue_rule <- "border-bottom-color: #204D6D"
+  last <- grepl("gt_last_summary_row", tags, fixed = TRUE)
+
+  # gt draws the summary rule under the last summary row too, and in a
+  # collapsed table that gray edge would win over the blue group rule.
+  expect_true(any(last))
+  expect_true(all(grepl(blue_rule, tags[last], fixed = TRUE)))
+  expect_false(any(grepl(blue_rule, tags[!last], fixed = TRUE)))
 })

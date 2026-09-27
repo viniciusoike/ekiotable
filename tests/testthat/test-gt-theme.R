@@ -65,7 +65,7 @@ test_that("the three body levels get distinct styles", {
   expect_equal(gt_option(out, "row_group_border_bottom_style"), "none")
   expect_equal(
     gt_styles_at(out, "row_groups")[[1]]$cell_text$color,
-    .ekio("blue", 600)
+    .ekio("gray", 900)
   )
   expect_equal(
     gt_styles_at(out, "stub")[[1]]$cell_text$color,
