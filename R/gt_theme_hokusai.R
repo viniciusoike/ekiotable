@@ -291,6 +291,31 @@ gt_theme_hokusai <- function(
       locations = list(gt::cells_body(), gt::cells_stub())
     )
 
+  styled_table <- .hokusai_structure(
+    styled_table,
+    data,
+    summary_color = colors$structure,
+    grand_color = colors$structure_dark,
+    rule_color = colors$editorial
+  )
+
+  return(styled_table)
+}
+
+# Shared structure ------------------------------------------------------------
+
+# Row-label indent, group summaries, and the grand summary, shared by the
+# Hokusai and dashboard themes. `data` is the unstyled table, which records
+# the groups and summaries. `font` sets summary figures in the numeric font;
+# NULL leaves them in the body font.
+.hokusai_structure <- function(
+  styled_table,
+  data,
+  summary_color,
+  grand_color,
+  rule_color,
+  font = NULL
+) {
   # gt keeps one raw CSS string per cell, so the indent restates the figure
   # style it would otherwise replace.
   if (.has_row_groups(data)) {
@@ -305,8 +330,13 @@ gt_theme_hokusai <- function(
   # missing summary from discarding styles for groups that have them, without
   # swallowing unrelated errors.
   # TRUE avoids gt 1.3.0's everything() resolution error for summary rows.
+  # Stub labels are words, so only the values take the numeric font.
   summary_style <- list(
-    gt::cell_text(color = colors$structure, weight = "700"),
+    gt::cell_text(color = summary_color, weight = "700", font = font),
+    .figure_css
+  )
+  summary_label_style <- list(
+    gt::cell_text(color = summary_color, weight = "700"),
     .figure_css
   )
   for (group in .summary_groups(data)) {
@@ -319,7 +349,7 @@ gt_theme_hokusai <- function(
     # the label stays body-colored while its own value is emphasized.
     styled_table <- gt::tab_style(
       styled_table,
-      style = summary_style,
+      style = summary_label_style,
       locations = gt::cells_stub_summary(groups = group, rows = TRUE)
     )
     # gt rules off the last summary row in the summary rule color. In a
@@ -329,7 +359,7 @@ gt_theme_hokusai <- function(
       styled_table,
       style = gt::cell_borders(
         sides = "bottom",
-        color = colors$editorial,
+        color = rule_color,
         weight = gt::px(1)
       ),
       locations = list(
@@ -340,10 +370,11 @@ gt_theme_hokusai <- function(
   }
 
   grand_style <- list(
-    gt::cell_text(
-      color = colors$structure_dark,
-      weight = "700"
-    ),
+    gt::cell_text(color = grand_color, weight = "700", font = font),
+    .figure_css
+  )
+  grand_label_style <- list(
+    gt::cell_text(color = grand_color, weight = "700"),
     .figure_css
   )
   if (.has_grand_summary(data)) {
@@ -354,7 +385,7 @@ gt_theme_hokusai <- function(
     )
     styled_table <- gt::tab_style(
       styled_table,
-      style = grand_style,
+      style = grand_label_style,
       locations = gt::cells_stub_grand_summary(rows = TRUE)
     )
   }

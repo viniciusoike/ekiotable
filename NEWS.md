@@ -1,5 +1,12 @@
 # ekiotable (development version)
 
+* Added `gt_theme_ekio_dashboard()`, an experimental theme for dashboards.
+  It uses the Hokusai palettes, plain column labels over a blue rule, thin
+  gray row rules instead of stripes, and IBM Plex Mono for numeric cells.
+  `density = "compact"` or `"dense"` sets row padding and the base size.
+
+* Added `ibm_plex_mono` to the font registry.
+
 * Promoted `gt_theme_hokusai()` to the recommended theme for reports and
   articles, and removed its experimental badge. `gt_theme_ekio()` stays
   available with its current look.
