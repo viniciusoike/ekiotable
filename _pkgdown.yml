@@ -15,6 +15,7 @@ reference:
     contents:
       - gt_theme_hokusai
       - gt_theme_ekio
+      - gt_theme_ekio_dashboard
   - title: Datasets
     desc: Example data included with ekiotable
     contents:

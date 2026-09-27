@@ -90,7 +90,8 @@
   georgia = "Georgia",
   roboto_slab = "Roboto Slab",
   fira_code = "Fira Code",
-  host_grotesk = "Host Grotesk"
+  host_grotesk = "Host Grotesk",
+  ibm_plex_mono = "IBM Plex Mono"
 )
 
 .font_defaults <- c(

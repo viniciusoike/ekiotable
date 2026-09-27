@@ -34,7 +34,8 @@ notes and footnotes 1px smaller.}
 \item{stripe}{Logical. Apply subtle alternating row shading (default: TRUE).}
 
 \item{font_title, font_body, font_numeric, font_labels}{A font family or registry
-key (\code{lora}, \code{lato}, \code{georgia}, \code{roboto_slab}, \code{fira_code}, \code{host_grotesk}).
+key (\code{lora}, \code{lato}, \code{georgia}, \code{roboto_slab}, \code{fira_code}, \code{host_grotesk},
+\code{ibm_plex_mono}).
 \code{NULL} uses the corresponding \verb{ekiotable.font_<role>} option. Title and body
 then use \code{ekioplot.font_title} and \code{ekioplot.font_text}, respectively, before
 falling back to Lora and Lato. Numeric and label fonts inherit the resolved
