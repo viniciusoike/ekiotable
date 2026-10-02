@@ -27,9 +27,10 @@
 # Surface resolution --------------------------------------------------------
 
 # Same vocabulary as theme_ekio(background =): three named surfaces on one
-# warm-to-cold axis, the transparent sentinel, and a hex escape hatch.
-# ekioplot keeps its resolver internal, so the names are repeated here.
-.gt_surfaces <- c("offwhite", "white", "cold", "transparent")
+# warm-to-cold axis, the card surface for tables placed on dashboard cards,
+# the transparent sentinel, and a hex escape hatch. ekioplot keeps its
+# resolver internal, so the names are repeated here.
+.gt_surfaces <- c("offwhite", "white", "card", "cold", "transparent")
 
 .resolve_surface <- function(background, call = parent.frame()) {
   if (
@@ -51,6 +52,7 @@
     background,
     offwhite = .ekio("basic", "offwhite"),
     white = .ekio("basic", "white"),
+    card = .ekio("basic", "card"),
     cold = .ekio("basic", "cold"),
     # gt emits this as rgba(255, 255, 255, 0), so the page shows through.
     transparent = "transparent",

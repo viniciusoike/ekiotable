@@ -22,7 +22,8 @@
 #'   Fonts must be available to the renderer; this function does not install them.
 #' @param background Character. Table surface, using the same vocabulary as
 #'   [ekioplot::theme_ekio()]: `"offwhite"` (default, `#FBFBF6`, a warm white),
-#'   `"white"`, `"cold"` (`#F6F7F8`, a cool white), or `"transparent"` to let
+#'   `"white"`, `"card"` (`#FFFFFC`, for tables on dashboard cards), `"cold"`
+#'   (`#F6F7F8`, a cool white), or `"transparent"` to let
 #'   the page show through. A hex code is also accepted, though only the named
 #'   surfaces are checked for contrast against the brand scales.
 #'

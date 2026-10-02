@@ -35,6 +35,9 @@
 
 * Fixed hairline seams between filled column label cells, visible in
   `gt_theme_ekio()` and in `gt_theme_hokusai(reversed = TRUE)`.
+* Added `gt_theme_ekio(background = "card")`, ekioplot's `#FFFFFC` card
+  surface, for tables placed on cards in sites and dashboards. The pinned
+  `basic` tokens also gain ekioplot's `nav`, `sunk` and `sunk_text`.
 
 * Fixed tabular figures leaking to other tables. Both themes set
   `font-variant-numeric` on their own body, stub, and summary cells instead
