@@ -72,6 +72,18 @@
 # sets tabular-nums on right-aligned cells only; this covers every row cell.
 .figure_css <- "font-variant-numeric: tabular-nums lining-nums;"
 
+# Row labels under a group heading step in from it. gt's stub padding is 5px;
+# this adds 12px. Padding rather than text-indent keeps wrapped labels aligned.
+.stub_indent_css <- "padding-left: 17px;"
+
+# Header cells often end on fractional pixel edges, and the browser leaves a
+# hairline between two filled cells that the table background shows through.
+# gt cannot fill the header row itself, so each cell paints 1px of its own
+# fill over the seam to its right.
+.header_seam_css <- function(fill) {
+  return(paste0("box-shadow: 1px 0 0 0 ", toupper(fill), ";"))
+}
+
 .ekio_font_stacks <- c(
   lora = "Lora",
   lato = "Lato",
@@ -173,6 +185,21 @@
   return(groups[!is.na(groups)])
 }
 
+# Assumes a gt table object and a group that defines summaries. gt names
+# every summary function and merges same-named rows across calls, so the
+# row count is the number of distinct names.
+.summary_row_count <- function(data, group) {
+  fns <- lapply(data[["_summary"]], function(summary) {
+    if (group %in% summary$groups) names(summary$fns) else NULL
+  })
+  return(length(unique(unlist(fns))))
+}
+
+# Assumes a gt table object. Rows outside any group have an NA group id.
+.has_row_groups <- function(data) {
+  return(any(!is.na(data[["_stub_df"]]$group_id)))
+}
+
 # Assumes a gt table object with a `_summary` entry.
 .has_grand_summary <- function(data) {
   summaries <- data[["_summary"]]
@@ -201,9 +228,9 @@
 
 # Representative RGB colors extracted from the four supplied reproductions
 # (cropped 4% at each edge, reduced to 400 px, median-cut quantized to 10 colors).
-# Ink, blue, mist, and paper are extracted colors. White is a neutral canvas;
-# wash is an explicit 25% paper-on-white tint. Each palette includes the
-# shared gray scale for rules, zebra stripes, and other neutral elements.
+# Ink, blue, mist, and paper are extracted colors. White is a neutral canvas.
+# Each palette includes the shared gray scale for rules, zebra stripes, and
+# other neutral elements.
 # These describe the supplied digital images, not original print pigments.
 .hokusai_palettes <- list(
   # Inume Pass in Kai Province
@@ -213,7 +240,6 @@
     mist = "#ACC1C2",
     paper = "#EFEADE",
     canvas = "#FFFFFF",
-    wash = "#FBFAF7",
     .hokusai_grays
   ),
   # Ejiri in Suruga Province
@@ -223,7 +249,6 @@
     mist = "#919E9F",
     paper = "#DDD5C4",
     canvas = "#FFFFFF",
-    wash = "#F6F4F0",
     .hokusai_grays
   ),
   # Bullfinch and Weeping Cherry (Uso, shidarezakura)
@@ -233,7 +258,6 @@
     mist = "#8F8D7A",
     paper = "#D3C8A9",
     canvas = "#FFFFFF",
-    wash = "#F4F1EA",
     .hokusai_grays
   ),
   # Lake Suwa in Shinano Province
@@ -243,7 +267,6 @@
     mist = "#9DA99E",
     paper = "#FCE8C6",
     canvas = "#FFFFFF",
-    wash = "#FEF9F1",
     .hokusai_grays
   )
 )
