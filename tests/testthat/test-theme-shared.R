@@ -1,8 +1,12 @@
-# Behavior both report themes share. Each test runs once per theme.
+# Behavior every theme shares. Each test runs once per theme.
 themes <- list(
   ekio = gt_theme_ekio,
-  hokusai = function(data) gt_theme_hokusai(data, reversed = TRUE)
+  hokusai = function(data) gt_theme_hokusai(data, reversed = TRUE),
+  dashboard = gt_theme_ekio_dashboard
 )
+
+# Themes that fill the column-label band.
+filled_themes <- themes[c("ekio", "hokusai")]
 
 # A factor stub is the case gt centers by default.
 factor_stub_tbl <- function() {
@@ -80,7 +84,7 @@ test_that("the stubhead matches the column labels", {
 
 test_that("filled header cells cover the sub-pixel seams between them", {
   local_font_options()
-  for (theme in themes) {
+  for (theme in filled_themes) {
     out <- theme(factor_stub_tbl())
     fill <- gt_styles_at(out, "columns_columns")[[1]]$cell_fill$color
     html <- html_block_css(out)

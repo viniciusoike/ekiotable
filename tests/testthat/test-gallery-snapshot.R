@@ -135,4 +135,13 @@ test_that("gallery tables render stable HTML", {
       )
     )
   )
+  expect_snapshot(
+    as.character(
+      gt::as_raw_html(
+        gallery_complete_table() |>
+          gt_theme_ekio_dashboard(),
+        inline_css = FALSE
+      )
+    )
+  )
 })

@@ -14,7 +14,15 @@ test_that("the registry offers the test alternatives", {
   local_font_options()
   expect_setequal(
     unname(.ekio_font_stacks),
-    c("Lora", "Lato", "Georgia", "Roboto Slab", "Fira Code", "Host Grotesk")
+    c(
+      "Lora",
+      "Lato",
+      "Georgia",
+      "Roboto Slab",
+      "Fira Code",
+      "Host Grotesk",
+      "IBM Plex Mono"
+    )
   )
 })
 
