@@ -23,7 +23,6 @@ Imports:
     cli,
     ekioplot (>= 1.1.0),
     gt,
-    lifecycle,
     tidyselect
 Suggests:
     knitr,

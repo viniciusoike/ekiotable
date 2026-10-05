@@ -33,6 +33,10 @@ gallery_complete_table <- function() {
     FUN = sum
   )
   pizza_data$average_price <- pizza_data$revenue / pizza_data$pizzas
+  pizza_data$category <- paste0(
+    toupper(substr(pizza_data$category, 1, 1)),
+    substring(pizza_data$category, 2)
+  )
   pizza_data$size <- factor(
     pizza_data$size,
     levels = c("S", "M", "L", "XL", "XXL")
@@ -57,28 +61,33 @@ gallery_complete_table <- function() {
       average_price = "Average price"
     ) |>
     gt::fmt_integer(columns = pizzas) |>
-    gt::fmt_currency(columns = c(revenue, average_price), currency = "USD") |>
+    gt::fmt_currency(columns = revenue, currency = "USD", decimals = 0) |>
+    gt::fmt_currency(columns = average_price, currency = "USD") |>
     gt::summary_rows(
       groups = tidyselect::everything(),
       columns = pizzas,
       fns = list(Total = ~ sum(.)),
+      missing_text = "",
       fmt = ~ gt::fmt_integer(.)
     ) |>
     gt::summary_rows(
       groups = tidyselect::everything(),
       columns = revenue,
       fns = list(Total = ~ sum(.)),
-      fmt = ~ gt::fmt_currency(., currency = "USD")
+      missing_text = "",
+      fmt = ~ gt::fmt_currency(., currency = "USD", decimals = 0)
     ) |>
     gt::grand_summary_rows(
       columns = pizzas,
       fns = list("Grand total" = ~ sum(.)),
+      missing_text = "",
       fmt = ~ gt::fmt_integer(.)
     ) |>
     gt::grand_summary_rows(
       columns = revenue,
       fns = list("Grand total" = ~ sum(.)),
-      fmt = ~ gt::fmt_currency(., currency = "USD")
+      missing_text = "",
+      fmt = ~ gt::fmt_currency(., currency = "USD", decimals = 0)
     ) |>
     gt::tab_footnote(
       footnote = "Counts pizzas sold, not distinct orders.",
@@ -112,7 +121,7 @@ test_that("gallery tables render stable HTML", {
     as.character(
       gt::as_raw_html(
         gallery_simple_table() |>
-          gt_theme_hokusai(palette = "mountain", stripe = TRUE),
+          gt_theme_hokusai(),
         inline_css = FALSE
       )
     )
@@ -121,7 +130,7 @@ test_that("gallery tables render stable HTML", {
     as.character(
       gt::as_raw_html(
         gallery_complete_table() |>
-          gt_theme_hokusai(palette = "mountain", stripe = TRUE),
+          gt_theme_hokusai(),
         inline_css = FALSE
       )
     )
