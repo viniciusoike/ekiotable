@@ -9,9 +9,6 @@
 ^CLAUDE\.md$
 ^data-raw$
 ^vignettes/articles$
-^IMPLEMENTATION-PLAN\.md$
-
 ^README\.html$
 ^Rplots\.pdf$
 ^refs$
-^pkgdown$
