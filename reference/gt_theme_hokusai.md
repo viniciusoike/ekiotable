@@ -52,13 +52,13 @@ gt_theme_hokusai(
 - font_title, font_body, font_numeric, font_labels:
 
   A font family or registry key (`lora`, `lato`, `georgia`,
-  `roboto_slab`, `fira_code`, `host_grotesk`). `NULL` uses the
-  corresponding `ekiotable.font_<role>` option. Title and body then use
-  `ekioplot.font_title` and `ekioplot.font_text`, respectively, before
-  falling back to Lora and Lato. Numeric and label fonts inherit the
-  resolved body font unless explicitly set or configured through their
-  role option. Fonts must be available to the renderer; this function
-  does not install them.
+  `roboto_slab`, `fira_code`, `host_grotesk`, `ibm_plex_mono`). `NULL`
+  uses the corresponding `ekiotable.font_<role>` option. Title and body
+  then use `ekioplot.font_title` and `ekioplot.font_text`, respectively,
+  before falling back to Lora and Lato. Numeric and label fonts inherit
+  the resolved body font unless explicitly set or configured through
+  their role option. Fonts must be available to the renderer; this
+  function does not install them.
 
 - font_stub:
 

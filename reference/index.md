@@ -8,6 +8,8 @@ Apply EKIO visual identity to gt tables
   : Apply a Minimal Hokusai Theme to GT Tables
 - [`gt_theme_ekio()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_ekio.md)
   : Apply the EKIO Theme to GT Tables
+- [`gt_theme_ekio_dashboard()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_ekio_dashboard.md)
+  **\[experimental\]** : Apply a Dense Dashboard Theme to GT Tables
 
 ## Datasets
 

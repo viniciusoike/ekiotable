@@ -224,6 +224,31 @@ complete_table |> gt_theme_hokusai(palette = "lake")
 
 [TABLE]
 
+## Dashboard
+
+[`gt_theme_ekio_dashboard()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_ekio_dashboard.md)
+is an experimental theme for dashboards and other dense screens. It
+reuses the Hokusai palettes and summary rules but drops the header band
+and the stripes: column labels are plain semibold text over a blue rule,
+rows are split by thin gray rules, and numeric cells use IBM Plex Mono.
+`density = "compact"` (the default) uses 4px row padding and a 13px base
+size; `density = "dense"` uses 2px and 12px. The page must load IBM Plex
+Mono; the theme does not.
+
+``` r
+
+complete_table |> gt_theme_ekio_dashboard()
+```
+
+[TABLE]
+
+``` r
+
+complete_table |> gt_theme_ekio_dashboard(density = "dense", palette = "lake")
+```
+
+[TABLE]
+
 ## EKIO
 
 [`gt_theme_ekio()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_ekio.md)

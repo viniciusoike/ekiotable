@@ -23,7 +23,7 @@ install.packages(
 
 ## Themes
 
-ekiotable ships two themes for gt tables:
+ekiotable ships three themes for gt tables:
 
 - [`gt_theme_hokusai()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_hokusai.md)
   is the recommended theme for reports, articles, and general use: a
@@ -33,8 +33,11 @@ ekiotable ships two themes for gt tables:
   uses a filled blue header, tinted subtotals, a dark grand total, and
   the warm offwhite surface of
   [`ekioplot::theme_ekio()`](https://viniciusoike.github.io/ekioplot/reference/theme_ekio.html).
+- [`gt_theme_ekio_dashboard()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_ekio_dashboard.md)
+  (experimental) is a tight theme for dashboards: plain column labels,
+  thin row rules, a monospace font for numbers, and two densities.
 
-Both use tabular numerals and add no footer.
+All use tabular numerals and add no footer.
 
 ``` r
 
@@ -62,6 +65,8 @@ Apply EKIO visual identity to gt tables
   : Apply a Minimal Hokusai Theme to GT Tables
 - [`gt_theme_ekio()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_ekio.md)
   : Apply the EKIO Theme to GT Tables
+- [`gt_theme_ekio_dashboard()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_ekio_dashboard.md)
+  **\[experimental\]** : Apply a Dense Dashboard Theme to GT Tables
 
 ## Datasets
 

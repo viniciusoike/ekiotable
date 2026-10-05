@@ -11,12 +11,12 @@ Source:
 [`DESCRIPTION`](https://github.com/viniciusoike/ekiotable/blob/master/DESCRIPTION)
 
 Oike V (2026). *ekiotable: EKIO Visual Identity System for Tables*. R
-package version 0.1.0, <https://viniciusoike.github.io/ekiotable/>.
+package version 0.2.0, <https://viniciusoike.github.io/ekiotable/>.
 
     @Manual{,
       title = {ekiotable: EKIO Visual Identity System for Tables},
       author = {Vinicius Oike},
       year = {2026},
-      note = {R package version 0.1.0},
+      note = {R package version 0.2.0},
       url = {https://viniciusoike.github.io/ekiotable/},
     }
