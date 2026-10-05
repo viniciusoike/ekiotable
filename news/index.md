@@ -2,6 +2,49 @@
 
 ## ekiotable (development version)
 
+- Promoted
+  [`gt_theme_hokusai()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_hokusai.md)
+  to the recommended theme for reports and articles, and removed its
+  experimental badge.
+  [`gt_theme_ekio()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_ekio.md)
+  stays available with its current look.
+
+- Changed
+  [`gt_theme_hokusai()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_hokusai.md)
+  defaults to `reversed = TRUE`, `stripe = TRUE`, and `font_size = 14`.
+  Pass `reversed = FALSE, stripe = FALSE, font_size = 12` for the
+  previous look.
+
+- Replaced the summary fills in
+  [`gt_theme_hokusai()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_hokusai.md)
+  with rules. A thin gray rule opens each group summary and a double
+  blue rule opens the grand summary; the blue rule of the next row group
+  now survives below a summary.
+
+- Tightened the
+  [`gt_theme_hokusai()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_hokusai.md)
+  header band: column labels use 8px padding, and spanners use the same
+  semibold weight as labels.
+
+- Changed row group headings in
+  [`gt_theme_ekio()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_ekio.md)
+  and
+  [`gt_theme_hokusai()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_hokusai.md)
+  to the body text color. The blue rule above each group stays, and blue
+  now marks only summary rows, so a group heading no longer reads as a
+  total.
+
+- Fixed stub labels centering when the stub column is a factor. Both
+  themes now left-align the stub and, in grouped tables, indent row
+  labels under their group heading.
+
+- Fixed the stubhead ignoring the column label style. It now takes the
+  same color, weight, and fill as the other column labels.
+
+- Fixed hairline seams between filled column label cells, visible in
+  [`gt_theme_ekio()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_ekio.md)
+  and in `gt_theme_hokusai(reversed = TRUE)`.
+
 - Fixed tabular figures leaking to other tables. Both themes set
   `font-variant-numeric` on their own body, stub, and summary cells
   instead of adding an unscoped `.gt_row` rule, which in knitr and

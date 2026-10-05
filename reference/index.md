@@ -4,10 +4,10 @@
 
 Apply EKIO visual identity to gt tables
 
+- [`gt_theme_hokusai()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_hokusai.md)
+  : Apply a Minimal Hokusai Theme to GT Tables
 - [`gt_theme_ekio()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_ekio.md)
   : Apply the EKIO Theme to GT Tables
-- [`gt_theme_hokusai()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_hokusai.md)
-  **\[experimental\]** : Apply a Minimal Hokusai Theme to GT Tables
 
 ## Datasets
 

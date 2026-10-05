@@ -7,10 +7,9 @@ adapt the cars and pizza sales prototypes and use datasets bundled with
 **gt**.
 
 Build the table first, including summaries and notes, then apply the
-theme. All Hokusai examples use `stripe = TRUE` and `gridlines = FALSE`:
-only the palette changes. The shared neutral stripes stay the same; look
-at the title, section rules, group headings, and summary fills to
-compare colors.
+theme. The Hokusai examples use the theme defaults, a blue header band
+and striped rows, and change only the palette. Compare the title, the
+header band, and the rules that open each group and summary.
 
 ## Build the examples
 
@@ -69,6 +68,10 @@ pizza_data <- aggregate(
   FUN = sum
 )
 pizza_data$average_price <- pizza_data$revenue / pizza_data$pizzas
+pizza_data$category <- paste0(
+  toupper(substr(pizza_data$category, 1, 1)),
+  substring(pizza_data$category, 2)
+)
 pizza_data$size <- factor(
   pizza_data$size,
   levels = c("S", "M", "L", "XL", "XXL")
@@ -96,28 +99,33 @@ complete_table <- pizza_data |>
     average_price = "Average price"
   ) |>
   fmt_integer(columns = pizzas) |>
-  fmt_currency(columns = c(revenue, average_price), currency = "USD") |>
+  fmt_currency(columns = revenue, currency = "USD", decimals = 0) |>
+    fmt_currency(columns = average_price, currency = "USD") |>
   summary_rows(
     groups = everything(),
     columns = pizzas,
     fns = list(Total = ~ sum(.)),
+    missing_text = "",
     fmt = ~ fmt_integer(.)
   ) |>
   summary_rows(
     groups = everything(),
     columns = revenue,
     fns = list(Total = ~ sum(.)),
-    fmt = ~ fmt_currency(., currency = "USD")
+    missing_text = "",
+    fmt = ~ fmt_currency(., currency = "USD", decimals = 0)
   ) |>
   grand_summary_rows(
     columns = pizzas,
     fns = list("Grand total" = ~ sum(.)),
+    missing_text = "",
     fmt = ~ fmt_integer(.)
   ) |>
   grand_summary_rows(
     columns = revenue,
     fns = list("Grand total" = ~ sum(.)),
-    fmt = ~ fmt_currency(., currency = "USD")
+    missing_text = "",
+    fmt = ~ fmt_currency(., currency = "USD", decimals = 0)
   ) |>
   tab_footnote(
     footnote = "Counts pizzas sold, not distinct orders; an order can contain several pizzas.",
@@ -132,12 +140,96 @@ complete_table <- pizza_data |>
   )
 ```
 
+## Hokusai
+
+[`gt_theme_hokusai()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_hokusai.md)
+is the recommended theme for reports and articles. Column labels sit on
+a blue band, body rows are striped, and fine rules mark the structure: a
+blue rule opens each row group, a gray rule opens each group summary,
+and a double blue rule opens the grand total. Summary rows carry no
+fill. Pass `reversed = FALSE` for dark labels on white, `stripe = FALSE`
+to drop the stripes, or `gridlines = TRUE` to add light cell rules.
+These are theme colors, not a scale encoding the values in the table.
+
+### Mountain
+
+Deep blue band and rules with warm cream labels. The darkest of the four
+palettes and the default.
+
+``` r
+
+simple_table |> gt_theme_hokusai(palette = "mountain")
+```
+
+[TABLE]
+
+``` r
+
+complete_table |> gt_theme_hokusai(palette = "mountain")
+```
+
+[TABLE]
+
+### Wind
+
+Muted slate blue with warm gray labels. The quietest band of the four.
+
+``` r
+
+simple_table |> gt_theme_hokusai(palette = "wind")
+```
+
+[TABLE]
+
+``` r
+
+complete_table |> gt_theme_hokusai(palette = "wind")
+```
+
+[TABLE]
+
+### Blossom
+
+Dark blue titles with a separate, brighter blue band and beige labels.
+
+``` r
+
+simple_table |> gt_theme_hokusai(palette = "blossom")
+```
+
+[TABLE]
+
+``` r
+
+complete_table |> gt_theme_hokusai(palette = "blossom")
+```
+
+[TABLE]
+
+### Lake
+
+Slate-blue titles with a lighter blue band and pale cream labels.
+
+``` r
+
+simple_table |> gt_theme_hokusai(palette = "lake")
+```
+
+[TABLE]
+
+``` r
+
+complete_table |> gt_theme_hokusai(palette = "lake")
+```
+
+[TABLE]
+
 ## EKIO
 
 [`gt_theme_ekio()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_ekio.md)
 uses filled blue column headers and spanners, unfilled group headings
-with blue rules, and a dark grand total. The table sits on the warm
-offwhite surface
+with blue rules, tinted subtotals, and a dark grand total. The table
+sits on the warm offwhite surface
 [`ekioplot::theme_ekio()`](https://viniciusoike.github.io/ekioplot/reference/theme_ekio.html)
 draws on, so a chart and a table in one document share a background.
 Pass `background = "white"`, `"cold"`, or `"transparent"` to change it.
@@ -153,93 +245,6 @@ simple_table |> gt_theme_ekio(stripe = TRUE)
 ``` r
 
 complete_table |> gt_theme_ekio(stripe = TRUE)
-```
-
-[TABLE]
-
-## Hokusai palettes
-
-Hokusai uses white headers, fine rules, and pale summary backgrounds.
-Typography, striping, and gridlines are held constant across the four
-palettes. These are theme colors, not a scale encoding the values in the
-table.
-
-### Mountain
-
-Deep blue titles and accents with a nearly white, warm summary tint.
-
-``` r
-
-simple_table |>
-  gt_theme_hokusai(palette = "mountain", stripe = TRUE, gridlines = FALSE)
-```
-
-[TABLE]
-
-``` r
-
-complete_table |>
-  gt_theme_hokusai(palette = "mountain", stripe = TRUE, gridlines = FALSE)
-```
-
-[TABLE]
-
-### Wind
-
-Muted slate-blue titles and accents with a warm gray summary tint.
-
-``` r
-
-simple_table |>
-  gt_theme_hokusai(palette = "wind", stripe = TRUE, gridlines = FALSE)
-```
-
-[TABLE]
-
-``` r
-
-complete_table |>
-  gt_theme_hokusai(palette = "wind", stripe = TRUE, gridlines = FALSE)
-```
-
-[TABLE]
-
-### Blossom
-
-Dark blue titles, a separate blue accent, and a pale beige summary tint.
-
-``` r
-
-simple_table |>
-  gt_theme_hokusai(palette = "blossom", stripe = TRUE, gridlines = FALSE)
-```
-
-[TABLE]
-
-``` r
-
-complete_table |>
-  gt_theme_hokusai(palette = "blossom", stripe = TRUE, gridlines = FALSE)
-```
-
-[TABLE]
-
-### Lake
-
-Slate-blue titles, a lighter blue accent, and a pale cream summary tint.
-
-``` r
-
-simple_table |>
-  gt_theme_hokusai(palette = "lake", stripe = TRUE, gridlines = FALSE)
-```
-
-[TABLE]
-
-``` r
-
-complete_table |>
-  gt_theme_hokusai(palette = "lake", stripe = TRUE, gridlines = FALSE)
 ```
 
 [TABLE]

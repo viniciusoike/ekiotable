@@ -1,10 +1,9 @@
 # Apply a Minimal Hokusai Theme to GT Tables
 
-**\[experimental\]**
-
-Blue typography and fine horizontal rules inspired by Hokusai prints.
-White backgrounds and pale paper tints keep analytical tables clean;
-color does not encode data values. No footer is added.
+The recommended theme for reports, articles, and general use. Blue
+typography and fine horizontal rules take their colors from Hokusai
+prints. Column labels sit on a blue band, body rows are striped, and
+color never encodes data values. No footer is added.
 
 ## Usage
 
@@ -13,15 +12,15 @@ gt_theme_hokusai(
   data,
   palette = c("mountain", "wind", "blossom", "lake"),
   table_width = "100%",
-  font_size = 12,
-  stripe = FALSE,
+  font_size = 14,
+  stripe = TRUE,
   font_title = NULL,
   font_body = NULL,
   font_numeric = NULL,
   font_labels = NULL,
   font_stub = NULL,
   gridlines = FALSE,
-  reversed = FALSE
+  reversed = TRUE
 )
 ```
 
@@ -42,13 +41,13 @@ gt_theme_hokusai(
 
 - font_size:
 
-  Numeric. Body font size in pixels (default: 12). Column labels and the
+  Numeric. Body font size in pixels (default: 14). Column labels and the
   subtitle are 2px larger, the title 8px larger, and source notes and
   footnotes 1px smaller.
 
 - stripe:
 
-  Logical. Apply subtle alternating row shading (default: FALSE).
+  Logical. Apply subtle alternating row shading (default: TRUE).
 
 - font_title, font_body, font_numeric, font_labels:
 
@@ -75,7 +74,8 @@ gt_theme_hokusai(
 - reversed:
 
   Logical. Fill column labels and spanners with the palette blue and use
-  the palette paper color for their text and rules (default: FALSE).
+  the palette paper color for their text and rules (default: TRUE).
+  `FALSE` sets labels in dark gray on the white canvas.
 
 ## Value
 
@@ -84,13 +84,15 @@ A styled gt table object.
 ## Details
 
 Four palette variants (`"mountain"`, `"wind"`, `"blossom"`, `"lake"`)
-pair blues with paper tones. Summary fills are lightened paper tones on
-a neutral white canvas. All palettes include a shared neutral gray scale
-(`gray_50` to `gray_900`). Zebra stripes use `gray_100`, gridlines use
-`gray_200`, and structural dividers use `gray_300`.
+pair blues with paper tones on a neutral white canvas. All palettes
+include a shared neutral gray scale (`gray_50` to `gray_900`). Zebra
+stripes use `gray_100`, gridlines use `gray_200`, and structural
+dividers use `gray_300`.
 
-Body text and column labels use dark gray; subtitles and notes use a
-softer dark gray. Blue emphasizes titles, group headings, and summaries.
+Body text uses dark gray; subtitles and notes use a softer dark gray.
+Blue marks titles and summaries. Row group headings keep the body color
+under a blue rule. Summary rows carry no fill: a thin gray rule opens
+each group summary and a double blue rule opens the grand summary.
 
 Column labels sit above the body in size and are set in semibold. Stub
 cells are also semibold. Families that ship semibold under a separate

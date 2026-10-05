@@ -86,10 +86,18 @@
 <p>ekiotable ships two themes for gt tables:</p>
 <ul>
 <li>
-<code><a href="reference/gt_theme_ekio.html">gt_theme_ekio()</a></code> — the default EKIO theme: filled blue column labels, unfilled group headings with blue rules, tabular numerals, and the same warm offwhite surface as <code><a href="https://viniciusoike.github.io/ekioplot/reference/theme_ekio.html" class="external-link">ekioplot::theme_ekio()</a></code>. No footer is added.</li>
+<code><a href="reference/gt_theme_hokusai.html">gt_theme_hokusai()</a></code> is the recommended theme for reports, articles, and general use: a blue header band, striped rows, fine rules for groups and totals, and four blue-and-paper palettes (<code>mountain</code>, <code>wind</code>, <code>blossom</code>, <code>lake</code>).</li>
 <li>
-<code><a href="reference/gt_theme_hokusai.html">gt_theme_hokusai()</a></code> — a minimal blue-and-paper theme with four palettes (<code>mountain</code>, <code>wind</code>, <code>blossom</code>, <code>lake</code>), optional gridlines, and no footer.</li>
+<code><a href="reference/gt_theme_ekio.html">gt_theme_ekio()</a></code> uses a filled blue header, tinted subtotals, a dark grand total, and the warm offwhite surface of <code><a href="https://viniciusoike.github.io/ekioplot/reference/theme_ekio.html" class="external-link">ekioplot::theme_ekio()</a></code>.</li>
 </ul>
+<p>Both use tabular numerals and add no footer.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://viniciusoike.github.io/ekiotable/">ekiotable</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gt.rstudio.com" class="external-link">gt</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span>rownames_to_stub <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/gt_theme_hokusai.html">gt_theme_hokusai</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="see-more">See more<a class="anchor" aria-label="anchor" href="#see-more"></a>
