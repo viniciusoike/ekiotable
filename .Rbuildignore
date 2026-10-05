@@ -12,3 +12,5 @@
 ^README\.html$
 ^Rplots\.pdf$
 ^refs$
+^\.claude$
+^\.omx$
