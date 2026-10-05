@@ -26,7 +26,8 @@ gt_theme_ekio(
 \item{stripe}{Logical. Apply alternating row striping (default: \code{TRUE}).}
 
 \item{font_title, font_body, font_numeric, font_labels}{A font family or registry
-key (\code{lora}, \code{lato}, \code{georgia}, \code{roboto_slab}, \code{fira_code}, \code{host_grotesk}).
+key (\code{lora}, \code{lato}, \code{georgia}, \code{roboto_slab}, \code{fira_code}, \code{host_grotesk},
+\code{ibm_plex_mono}).
 \code{NULL} uses the corresponding \verb{ekiotable.font_<role>} option. Title and body
 then use \code{ekioplot.font_title} and \code{ekioplot.font_text}, respectively, before
 falling back to Lora and Lato. Numeric and label fonts inherit the resolved
@@ -35,7 +36,8 @@ Fonts must be available to the renderer; this function does not install them.}
 
 \item{background}{Character. Table surface, using the same vocabulary as
 \code{\link[ekioplot:theme_ekio]{ekioplot::theme_ekio()}}: \code{"offwhite"} (default, \verb{#FBFBF6}, a warm white),
-\code{"white"}, \code{"cold"} (\verb{#F6F7F8}, a cool white), or \code{"transparent"} to let
+\code{"white"}, \code{"card"} (\verb{#FFFFFC}, for tables on dashboard cards), \code{"cold"}
+(\verb{#F6F7F8}, a cool white), or \code{"transparent"} to let
 the page show through. A hex code is also accepted, though only the named
 surfaces are checked for contrast against the brand scales.}
 }

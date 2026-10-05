@@ -14,7 +14,7 @@
     Condition
       Error in `.ekio()`:
       ! Unknown color "beige" in "basic".
-      i Available: "white", "offwhite", "cold", "pivot", and "black"
+      i Available: "white", "offwhite", "cold", "card", "nav", "sunk", "sunk_text", "pivot", and "black"
 
 ---
 
@@ -30,6 +30,8 @@
     Code
       print(.ekio_local[["basic"]])
     Output
-          white  offwhite      cold     pivot     black 
-      "#FFFFFF" "#FBFBF6" "#F6F7F8" "#F5F3EF" "#000000" 
+          white  offwhite      cold      card       nav      sunk sunk_text     pivot 
+      "#FFFFFF" "#FBFBF6" "#F6F7F8" "#FFFFFC" "#F7F5EE" "#F3EFE4" "#63676C" "#F5F3EF" 
+          black 
+      "#000000" 
 

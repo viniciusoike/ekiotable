@@ -44,7 +44,7 @@
       gt_theme_ekio(small_tbl(), background = "beige")
     Condition
       Error in `gt_theme_ekio()`:
-      ! `background` must be one of "offwhite", "white", "cold", and "transparent", or a hex code.
+      ! `background` must be one of "offwhite", "white", "card", "cold", and "transparent", or a hex code.
       x Got "beige".
 
 ---

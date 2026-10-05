@@ -227,6 +227,7 @@ test_that("gt_theme_ekio() takes every named theme_ekio() surface", {
   surfaces <- c(
     offwhite = .ekio("basic", "offwhite"),
     white = .ekio("basic", "white"),
+    card = .ekio("basic", "card"),
     cold = .ekio("basic", "cold")
   )
 

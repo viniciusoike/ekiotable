@@ -11,6 +11,10 @@
     white = "#FFFFFF",
     offwhite = "#FBFBF6",
     cold = "#F6F7F8",
+    card = "#FFFFFC",
+    nav = "#F7F5EE",
+    sunk = "#F3EFE4",
+    sunk_text = "#63676C",
     pivot = "#F5F3EF",
     black = "#000000"
   )

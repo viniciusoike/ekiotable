@@ -1,12 +1,43 @@
-# ekiotable (development version)
+# ekiotable 0.2.0
+
+## Breaking changes
 
 * Promoted `gt_theme_hokusai()` to the recommended theme for reports and
   articles, and removed its experimental badge. `gt_theme_ekio()` stays
-  available with its current look.
+  available.
 
 * Changed `gt_theme_hokusai()` defaults to `reversed = TRUE`, `stripe = TRUE`,
   and `font_size = 14`. Pass `reversed = FALSE, stripe = FALSE, font_size = 12`
   for the previous look.
+
+* `gt_theme_ekio()` now draws the table, heading, source notes, and footnotes
+  on the warm offwhite surface `#FBFBF6`, matching the `ekioplot::theme_ekio()`
+  default. Pass `background = "white"` for the previous surface.
+
+* Replaced the two identity-palette colors in `gt_theme_ekio()` with rungs of
+  the generated blue scale. Rules moved from Baltic Blue to `blue.600`, and the
+  summary row band moved from Soft Linen 2 to `blue.100`.
+
+## New features
+
+* Added `gt_theme_ekio_dashboard()`, an experimental theme for dashboards.
+  It uses the Hokusai palettes, plain column labels over a blue rule, thin
+  gray row rules instead of stripes, and IBM Plex Mono for numeric cells.
+  `density = "compact"` or `"dense"` sets row padding and the base size.
+
+* Added the `background` argument to `gt_theme_ekio()`, which takes the same
+  surfaces as `ekioplot::theme_ekio()`: `"offwhite"`, `"white"`, `"card"`,
+  `"cold"`, `"transparent"`, or a hex code. `"card"` (`#FFFFFC`) suits tables
+  placed on cards in sites and dashboards.
+
+* Added `ibm_plex_mono` to the font registry.
+
+* Added the `card`, `nav`, `sunk`, and `sunk_text` surface tokens from
+  ekioplot, and refreshed `offwhite` (`#FBFBF6`, previously `#FEFEFE`) and
+  `cold` (`#F6F7F8`) against ekioplot 1.1.2. `ekio_brand` now resolves through
+  `ekioplot::ekio_pal()` instead of a local copy.
+
+## Minor improvements
 
 * Replaced the summary fills in `gt_theme_hokusai()` with rules. A thin gray
   rule opens each group summary and a double blue rule opens the grand
@@ -19,6 +50,16 @@
   the body text color. The blue rule above each group stays, and blue now marks
   only summary rows, so a group heading no longer reads as a total.
 
+* The pkgdown site now uses the shared ekiopkgdown template, and GitHub Actions
+  run `R CMD check` on macOS, Windows, and Linux and deploy the site.
+
+## Bug fixes
+
+* Fixed tabular figures leaking to other tables. Both themes set
+  `font-variant-numeric` on their own body, stub, and summary cells instead
+  of adding an unscoped `.gt_row` rule, which in knitr and Quarto output
+  reached every gt table on the page.
+
 * Fixed stub labels centering when the stub column is a factor. Both themes
   now left-align the stub and, in grouped tables, indent row labels under
   their group heading.
@@ -28,36 +69,6 @@
 
 * Fixed hairline seams between filled column label cells, visible in
   `gt_theme_ekio()` and in `gt_theme_hokusai(reversed = TRUE)`.
-
-* Fixed tabular figures leaking to other tables. Both themes set
-  `font-variant-numeric` on their own body, stub, and summary cells instead
-  of adding an unscoped `.gt_row` rule, which in knitr and Quarto output
-  reached every gt table on the page.
-
-* Added GitHub Actions workflows for `R CMD check` and pkgdown. The checks run
-  on macOS, Windows, and Linux across R release, devel, and the four previous
-  releases. pkgdown builds the package site and deploys it to GitHub Pages on
-  every push to `master` and on release.
-
-* `gt_theme_ekio()` now draws the table, heading, source notes, and footnotes
-  on the warm offwhite surface `#FBFBF6`, matching the `ekioplot::theme_ekio()`
-  default. A chart and a table in one document no longer disagree about the
-  background.
-
-* Added the `background` argument to `gt_theme_ekio()`, which takes the same
-  surfaces as `ekioplot::theme_ekio()`: `"offwhite"`, `"white"`, `"cold"`,
-  `"transparent"`, or a hex code.
-
-* Replaced the two identity-palette colors in `gt_theme_ekio()` with rungs of
-  the generated blue scale. Rules and row group headings moved from Baltic Blue
-  to `blue.600`, and the summary row band moved from Soft Linen 2 to
-  `blue.100`. The theme now sources every color from the scales, and
-  `ekio_brand` is reserved for identity work.
-
-* Refreshed the pinned surface tokens against ekioplot 1.1.2: `offwhite` is
-  `#FBFBF6` rather than the near-white `#FEFEFE`, and `cold` (`#F6F7F8`) was
-  added. `ekio_brand` is no longer copied into the package and resolves through
-  `ekioplot::ekio_pal()` instead.
 
 # ekiotable 0.1.0
 

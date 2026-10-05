@@ -32,7 +32,7 @@ install.packages(
 
 ## Themes
 
-ekiotable ships two themes for gt tables:
+ekiotable ships three themes for gt tables:
 
 - `gt_theme_hokusai()` is the recommended theme for reports, articles,
   and general use: a blue header band, striped rows, fine rules for
@@ -41,8 +41,11 @@ ekiotable ships two themes for gt tables:
 - `gt_theme_ekio()` uses a filled blue header, tinted subtotals, a dark
   grand total, and the warm offwhite surface of
   `ekioplot::theme_ekio()`.
+- `gt_theme_ekio_dashboard()` (experimental) is a tight theme for
+  dashboards: plain column labels, thin row rules, a monospace font for
+  numbers, and two densities.
 
-Both use tabular numerals and add no footer.
+All use tabular numerals and add no footer.
 
 ``` r
 library(ekiotable)
