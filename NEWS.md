@@ -39,6 +39,9 @@
 
 ## Minor improvements
 
+* Increased heading padding in `gt_theme_hokusai()` and closed inverted
+  header bands in blue, keeping paper-colored rules between spanners and labels.
+
 * Replaced the summary fills in `gt_theme_hokusai()` with rules. A thin gray
   rule opens each group summary and a double blue rule opens the grand
   summary; the blue rule of the next row group now survives below a summary.

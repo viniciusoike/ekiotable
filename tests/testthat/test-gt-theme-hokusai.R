@@ -77,6 +77,42 @@ test_that("the header band stays light: tight padding, one label weight", {
   )
 })
 
+test_that("headings have breathing room above the inverted band", {
+  out <- small_tbl() |>
+    gt::tab_header(title = "Selected cars", subtitle = "Illustrative data") |>
+    gt_theme_hokusai()
+
+  expect_equal(gt_option(out, "heading_padding"), "8px")
+})
+
+test_that("the inverted band closes in blue but retains paper spanner rules", {
+  for (palette in names(.hokusai_palettes)) {
+    out <- small_tbl() |>
+      gt::tab_spanner(label = "Values", columns = gt::everything()) |>
+      gt_theme_hokusai(palette = palette)
+
+    pal <- .hokusai_palettes[[palette]]
+    tags <- regmatches(
+      html_block_css(out),
+      gregexpr('<th[^>]*class="gt_col_heading[^>]*>', html_block_css(out))
+    )[[1]]
+    expect_gt(length(tags), 0)
+    expect_true(all(grepl(
+      paste0("border-bottom-color: ", pal[["blue"]]),
+      tags,
+      fixed = TRUE
+    )))
+    expect_equal(
+      gt_option(out, "column_labels_border_bottom_color"),
+      pal[["paper"]]
+    )
+    expect_equal(gt_option(out, "column_labels_vlines_color"), pal[["paper"]])
+  }
+
+  plain <- gt_theme_hokusai(small_tbl(), reversed = FALSE)
+  expect_equal(gt_option(plain, "column_labels_border_bottom_color"), "#D4D4D4")
+})
+
 test_that("summary rows are marked by rules and ink, not fills", {
   local_font_options()
   out <- gt_theme_hokusai(summarized_tbl())

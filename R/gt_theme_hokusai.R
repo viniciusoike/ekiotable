@@ -146,6 +146,7 @@ gt_theme_hokusai <- function(
       table_body.border.bottom.style = "none",
 
       heading.background.color = pal$canvas,
+      heading.padding = gt::px(8),
       heading.title.font.size = gt::px(size_title),
       heading.title.font.weight = "600",
       heading.subtitle.font.size = gt::px(size_subtitle),
@@ -218,6 +219,11 @@ gt_theme_hokusai <- function(
           font = stack_labels
         ),
         gt::cell_fill(color = label_background),
+        gt::cell_borders(
+          sides = "bottom",
+          color = if (reversed) label_background else label_rule,
+          weight = gt::px(1)
+        ),
         .header_seam_css(label_background)
       ),
       locations = list(gt::cells_column_labels(), gt::cells_stubhead())

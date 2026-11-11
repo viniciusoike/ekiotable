@@ -6,5 +6,10 @@ docs/
 *.Rcheck/
 .DS_Store
 refs/*
+!refs/render-design-review.R
+!refs/design-review/
+refs/design-review/*
+!refs/design-review/README.md
+!refs/design-review/*.png
 .Rprofile
 README.html
