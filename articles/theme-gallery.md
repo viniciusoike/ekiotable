@@ -44,7 +44,8 @@ simple_table <- cars_data |>
     mpg_c = "City",
     mpg_h = "Highway"
   ) |>
-  fmt_integer(columns = c(hp, trq, mpg_c, mpg_h))
+  fmt_integer(columns = c(hp, trq, mpg_c, mpg_h)) |>
+  cols_width(model ~ pct(32), c(hp, trq, mpg_c, mpg_h) ~ pct(17))
 ```
 
 ### Complete table
@@ -91,7 +92,7 @@ complete_table <- pizza_data |>
     title = "Pizza sales by category and size",
     subtitle = "Full-year sales, 2015"
   ) |>
-  tab_stubhead(label = "Category / size") |>
+  tab_stubhead(label = "Size") |>
   tab_spanner(label = "Sales", columns = c(pizzas, revenue)) |>
   cols_label(
     pizzas = "Pizzas sold",
@@ -100,7 +101,8 @@ complete_table <- pizza_data |>
   ) |>
   fmt_integer(columns = pizzas) |>
   fmt_currency(columns = revenue, currency = "USD", decimals = 0) |>
-    fmt_currency(columns = average_price, currency = "USD") |>
+  fmt_currency(columns = average_price, currency = "USD") |>
+  cols_width(size ~ pct(28), c(pizzas, revenue, average_price) ~ pct(24)) |>
   summary_rows(
     groups = everything(),
     columns = pizzas,
@@ -190,7 +192,7 @@ complete_table |> gt_theme_hokusai(palette = "wind")
 
 ### Blossom
 
-Dark blue titles with a separate, brighter blue band and beige labels.
+Dark title ink with a blue band and beige labels.
 
 ``` r
 

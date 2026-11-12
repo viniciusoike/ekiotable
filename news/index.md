@@ -57,6 +57,11 @@
 
 ### Minor improvements
 
+- Increased heading padding in
+  [`gt_theme_hokusai()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_hokusai.md)
+  and closed inverted header bands in blue, keeping paper-colored rules
+  between spanners and labels.
+
 - Replaced the summary fills in
   [`gt_theme_hokusai()`](https://viniciusoike.github.io/ekiotable/reference/gt_theme_hokusai.md)
   with rules. A thin gray rule opens each group summary and a double
