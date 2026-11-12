@@ -17,7 +17,8 @@ gallery_simple_table <- function() {
       mpg_c = "City",
       mpg_h = "Highway"
     ) |>
-    gt::fmt_integer(columns = c(hp, trq, mpg_c, mpg_h))
+    gt::fmt_integer(columns = c(hp, trq, mpg_c, mpg_h)) |>
+    gt::cols_width(model ~ gt::pct(32), c(hp, trq, mpg_c, mpg_h) ~ gt::pct(17))
 }
 
 gallery_complete_table <- function() {
@@ -53,7 +54,7 @@ gallery_complete_table <- function() {
       title = "Pizza sales by category and size",
       subtitle = "Full-year sales, 2015"
     ) |>
-    gt::tab_stubhead(label = "Category / size") |>
+    gt::tab_stubhead(label = "Size") |>
     gt::tab_spanner(label = "Sales", columns = c(pizzas, revenue)) |>
     gt::cols_label(
       pizzas = "Pizzas sold",
@@ -63,6 +64,10 @@ gallery_complete_table <- function() {
     gt::fmt_integer(columns = pizzas) |>
     gt::fmt_currency(columns = revenue, currency = "USD", decimals = 0) |>
     gt::fmt_currency(columns = average_price, currency = "USD") |>
+    gt::cols_width(
+      size ~ gt::pct(28),
+      c(pizzas, revenue, average_price) ~ gt::pct(24)
+    ) |>
     gt::summary_rows(
       groups = tidyselect::everything(),
       columns = pizzas,
